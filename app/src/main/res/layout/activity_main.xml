@@ -1,64 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/Theme.ChatProject.AppBarOverlay">
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <include
-        android:id="@+id/include"
-        layout="@layout/content_main"
-        app:layout_anchor="@+id/textView"
-        app:layout_anchorGravity="center" />
+    <Button
+        android:id="@+id/czatPrzycisk"
+        android:layout_width="210dp"
+        android:layout_height="44dp"
+        android:onClick="onChatButton"
+        android:text="Czat"
+        app:layout_constraintBottom_toTopOf="@+id/contactsList"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/czaty"
-        android:layout_width="130dp"
-        android:layout_height="wrap_content"
-        android:rotationX="2"
-        android:text="Czaty"
-        app:layout_anchor="@+id/toolbar"
-        app:layout_anchorGravity="center" />
-
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="130dp"
-        android:layout_height="wrap_content"
-        android:text="Połączenia"
-        app:layout_anchor="@+id/toolbar"
-        app:layout_anchorGravity="end|center" />
-
-    <Button
-        android:id="@+id/button4"
-        android:layout_width="130dp"
-        android:layout_height="wrap_content"
-        android:text="Kontakty"
-        app:layout_anchor="@+id/toolbar"
-        app:layout_anchorGravity="start|center" />
+        android:id="@+id/kontaktyPrzycisk"
+        android:layout_width="202dp"
+        android:layout_height="44dp"
+        android:text="Lista Kontaktów"
+        app:layout_constraintBottom_toTopOf="@+id/contactsList"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="358dp"
-        android:layout_height="600dp"
-        app:layout_anchor="@+id/include"
-        app:layout_anchorGravity="center">
+        android:id="@+id/contactsList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
     </androidx.recyclerview.widget.RecyclerView>
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:popupTheme="@style/Theme.ChatProject.PopupOverlay" />
-
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
