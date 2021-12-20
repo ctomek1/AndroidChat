@@ -1,12 +1,9 @@
 package com.myapplication;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,10 +18,6 @@ import java.net.Socket;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -42,7 +35,7 @@ public class ChatActivity extends AppCompatActivity {
     Socket socket;
     BufferedReader in;
     BufferedWriter out;
-    ArrayList<Message> messagesList = new ArrayList<Message>();
+    ArrayList<Message> messagesList = new ArrayList<>();
 
     public ChatActivity(Socket socket)
     {
@@ -50,7 +43,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     public ChatActivity() throws IOException {
-        socket = new Socket("ip", 0000);
+        socket = new Socket("ip", 0);
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         this.out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
     }
@@ -62,10 +55,11 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.chat);
 
         chatRecyclerView = findViewById(R.id.chatRecyclerView);
+        chatRecyclerView.setAdapter(chatAdapter);
         messageBox = findViewById(R.id.message);
-        messageList = new ArrayList<Message>();
-        chatAdapter = new ChatAdapter(this, messageList);
+        messageList = new ArrayList<>();
         sendButton = findViewById(R.id.imageView);
+        sendButton.setClickable(true);
 
         sendButton.setOnClickListener(
                 v -> {
@@ -76,28 +70,18 @@ public class ChatActivity extends AppCompatActivity {
                     String chatMessage = null;
                     try {
                         chatMessage = messageSender.SendMessage();
-                    } catch (BadPaddingException e) {
-                        e.printStackTrace();
-                    } catch (NoSuchAlgorithmException e) {
-                        e.printStackTrace();
-                    } catch (IllegalBlockSizeException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    } catch (NoSuchPaddingException e) {
-                        e.printStackTrace();
-                    } catch (InvalidKeyException e) {
+                    } catch (BadPaddingException | NoSuchAlgorithmException | InvalidKeyException | NoSuchPaddingException | JSONException | IllegalBlockSizeException e) {
                         e.printStackTrace();
                     }
                     if(socket.isConnected())
                     {
-                        String messageToSend = chatMessage;
                         try {
-                            out.write(messageToSend);
+                            out.write(chatMessage);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                     }
+                    chatAdapter = new ChatAdapter(this, messageList);
                 });
 
     }

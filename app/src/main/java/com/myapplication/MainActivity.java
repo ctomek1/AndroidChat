@@ -32,11 +32,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        try {
-            chatActivity = new ChatActivity();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
         createContactsData();
 
     }
