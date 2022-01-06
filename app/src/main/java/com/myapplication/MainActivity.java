@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView chatRecyclerView;
     String[] messages;
     ArrayList<Message> messagesList;
-    ChatAdapter chatAdapter;
     ChatActivity chatActivity;
 
     @Override
@@ -75,15 +74,10 @@ public class MainActivity extends AppCompatActivity {
 
         messagesList = new ArrayList<Message>();
 
-        chatAdapter = new ChatAdapter(this, messagesList);
-        chatRecyclerView.setAdapter(chatAdapter);
-
         messages = new String[]{
                 "mess",
                 "age",
         };
-
-        getChatData();
     }
 
     private void getContactsData() {
@@ -95,21 +89,13 @@ public class MainActivity extends AppCompatActivity {
         myAdapter.notifyDataSetChanged();
     }
 
-    private void getChatData() {
-
-        for (String s : messages) {
-            //Message message = new Message(s);
-            //messagesList.add(message);
-        }
-        chatAdapter.notifyDataSetChanged();
-    }
-
     public void onContactsButton(View view){
         setContentView(R.layout.activity_main);
         createContactsData();
     }
 
     public void onChatButton(View view){
+        chatActivity = new ChatActivity(new Socket());
         setContentView(R.layout.chat);
     }
 }
