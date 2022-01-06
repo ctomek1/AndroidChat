@@ -13,6 +13,7 @@ public class MessageSender {
 
     Message message;
     Send send = new Send();
+    int userId = 1;
 
     public MessageSender(Message message)
     {
@@ -20,7 +21,7 @@ public class MessageSender {
     }
 
     public String SendMessage() throws BadPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, JSONException, NoSuchPaddingException, InvalidKeyException {
-        String messageToSend = send.SendPrivateMessage(message.id, message.message, message.dateOfSend);
+        String messageToSend = send.SendPrivateMessage(userId, message.message, message.id, message.dateOfSend);
 
         return messageToSend;
     }

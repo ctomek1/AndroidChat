@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -73,6 +74,7 @@ public class ChatActivity extends AppCompatActivity {
                     } catch (BadPaddingException | NoSuchAlgorithmException | InvalidKeyException | NoSuchPaddingException | JSONException | IllegalBlockSizeException e) {
                         e.printStackTrace();
                     }
+
                     if(socket.isConnected())
                     {
                         try {

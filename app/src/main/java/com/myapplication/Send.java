@@ -37,10 +37,11 @@ public class Send
         return registerJSON.toString();
     }
 
-    public String GetAllGroups() throws JSONException {
+    public String GetAllGroups(int userId) throws JSONException {
 
         JSONObject getGroupsJSON = new JSONObject();
         getGroupsJSON.put("id", 3);
+        getGroupsJSON.put("userId", userId);
 
         return getGroupsJSON.toString();
     }
@@ -62,38 +63,40 @@ public class Send
         return createGroupJSON.toString();
     }
 
-    public String AddUserToGroup(int userId, int groupId) throws JSONException {
+    public String AddUserToGroup(int newGroupMemberId, int groupId) throws JSONException {
 
         JSONObject addUserToGroupJSON = new JSONObject();
         addUserToGroupJSON.put("id", 6);
-        addUserToGroupJSON.put("userId", userId);
+        addUserToGroupJSON.put("userId", newGroupMemberId);
         addUserToGroupJSON.put("groupId", groupId);
 
         return addUserToGroupJSON.toString();
     }
 
-    public String SendPrivateMessage(int recevierId, String messageContent, Date dateOfSend) throws JSONException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
+    public String SendPrivateMessage(int authorId, String messageContent, int receiverId, Date date) throws JSONException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
 
         byte[] cypherMessageContent = messageContent.getBytes();
 
         JSONObject sendPrivateMessageJSON = new JSONObject();
         sendPrivateMessageJSON.put("id", 7);
-        sendPrivateMessageJSON.put("recevierId", recevierId);
+        sendPrivateMessageJSON.put("authorId", authorId);
+        sendPrivateMessageJSON.put("receiverId", receiverId);
         sendPrivateMessageJSON.put("messageContent", Encryptor(cypherMessageContent, KEY_IN_BYTES).toString());
-        sendPrivateMessageJSON.put("dateOfSend", dateOfSend);
+        sendPrivateMessageJSON.put("date", date);
 
         return sendPrivateMessageJSON.toString();
     }
 
-    public String SendGroupMessage(int groupId, String messageContent, Date dateOfSend) throws JSONException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
+    public String SendGroupMessage(int authorId, String messageContent, int groupId, Date date) throws JSONException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
 
         byte[] cypherMessageContent = messageContent.getBytes();
 
         JSONObject sendGroupMessageJSON = new JSONObject();
         sendGroupMessageJSON.put("id", 8);
+        sendGroupMessageJSON.put("authorId", authorId);
         sendGroupMessageJSON.put("groupId", groupId);
         sendGroupMessageJSON.put("messageContent", Encryptor(cypherMessageContent, KEY_IN_BYTES).toString());
-        sendGroupMessageJSON.put("dateOfSend", dateOfSend);
+        sendGroupMessageJSON.put("dateOfSend", date);
 
         return sendGroupMessageJSON.toString();
     }
@@ -118,22 +121,20 @@ public class Send
         return addUserToGroupJSON.toString();
     }
 
-    public String GetRecentGroupMessage(int groupId, int authorId) throws JSONException {
+    public String GetRecentGroupMessage(int groupId) throws JSONException {
 
         JSONObject addUserToGroupJSON = new JSONObject();
         addUserToGroupJSON.put("id", 11);
         addUserToGroupJSON.put("groupId", groupId);
-        addUserToGroupJSON.put("authorId", authorId);
 
         return addUserToGroupJSON.toString();
     }
 
-    public String GetAllGroupMessages(int groupId, int authorId) throws JSONException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
+    public String GetAllGroupMessages(int groupId) throws JSONException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
 
         JSONObject addUserToGroupJSON = new JSONObject();
         addUserToGroupJSON.put("id", 12);
-        addUserToGroupJSON.put("groupID", groupId);
-        addUserToGroupJSON.put("authorId", authorId);
+        addUserToGroupJSON.put("groupId", groupId);
 
         return addUserToGroupJSON.toString();
     }
