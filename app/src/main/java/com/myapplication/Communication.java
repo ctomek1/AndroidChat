@@ -7,13 +7,13 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
-public class Comunnication {
+public class Communication {
 
     Socket socket;
     BufferedReader in;
     BufferedWriter out;
 
-    public Comunnication() throws IOException {
+    public Communication() throws IOException {
         socket = new Socket("ip", 0);
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         this.out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));

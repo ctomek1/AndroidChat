@@ -7,5 +7,15 @@
     <string name="send">Send</string>
     <string name="login">Login</string>
     <string name="register">Register</string>
+    <string name="registerNewUser">Register new user</string>
     <string name="back">Back</string>
+    <string name="loginError">Login error</string>
+    <string name="registerError">Register error</string>
+    <string name="invalidLoginOrPassword">Invalid login or password</string>
+    <string name="notEnteredLoginOrPassword">Login or password has not been entered</string>
+    <string name="userAlreadyExist">User already exist</string>
+    <string name="registrationSuccessful">Registration successful</string>
+    <string name="registrationWasSuccessful">Registration was successful</string>
+    <string name="invalidPasswords">Invalid passwords</string>
+    <string name="passwordsNotTheSame">Passwords are not the same</string>
 </resources>

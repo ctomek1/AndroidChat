@@ -1,6 +1,6 @@
 package com.myapplication;
 
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,8 +15,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -26,15 +24,12 @@ public class Login extends AppCompatActivity {
 
     private int userId;
 
-    public Login() {
-    }
+    public Login() {}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
 
         Button loginButton = findViewById(R.id.loginButton);
         Button registerButton = findViewById(R.id.registerButton);
@@ -47,26 +42,24 @@ public class Login extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (username.getText().toString().isEmpty() || password.getText().toString().isEmpty()) {
-                    openAlertDialog("Popraw", "Popraw");
+                    openAlertDialog(getResources().getString(R.string.notEnteredLoginOrPassword),  getResources().getString(R.string.loginError));
                 }
                 else
                 {
-
                     try {
 
-                        Comunnication comunnication  = new Comunnication();
-                        String result = comunnication.SendAndReceiveMessage(GetLoginResultString(username.getText().toString(), password.getText().toString()));
+                        Communication communication = new Communication();
+                        String result = communication.SendAndReceiveMessage(GetLoginResultString(username.getText().toString(), password.getText().toString()));
                         JSONObject jsonResult = new JSONObject(result);
 
                         if ((boolean) jsonResult.get("result") == true) {
 
                             userId = (int) jsonResult.get("userId");
-
-                            setContentView(R.layout.register);
+                            openNewActivity(MainActivity.class);
                         }
                         else
                         {
-                            openAlertDialog("Nie", "Nie");
+                            openAlertDialog(getResources().getString(R.string.invalidLoginOrPassword), getResources().getString(R.string.loginError));
                         }
 
                     } catch (IOException e) {
@@ -92,7 +85,7 @@ public class Login extends AppCompatActivity {
         {
             @Override
             public void onClick(View v) {
-               setContentView(R.layout.register);
+                openNewActivity(Register.class);
             }
         });
     }
@@ -106,7 +99,13 @@ public class Login extends AppCompatActivity {
     }
 
     private void openAlertDialog(String message, String title) {
+
         AlertDialogClass alertDialogClass =  new AlertDialogClass(message, title);
         alertDialogClass.show(getSupportFragmentManager(), "AlertDialogCreator");
+    }
+
+    private void openNewActivity(Class activityClass) {
+
+        startActivity(new Intent(this, activityClass));
     }
 }
