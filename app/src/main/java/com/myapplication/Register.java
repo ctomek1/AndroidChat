@@ -1,6 +1,6 @@
 package com.myapplication;
 
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,7 +15,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -23,17 +22,12 @@ import javax.crypto.NoSuchPaddingException;
 
 public class Register extends AppCompatActivity {
 
-    public Register()
-    {
-
-    }
+    public Register() {}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
-
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
 
         Button registerButton = findViewById(R.id.registerButton);
         Button backButton = findViewById(R.id.backButton);
@@ -48,23 +42,24 @@ public class Register extends AppCompatActivity {
 
                 if (username.getText().toString().isEmpty() || password.getText().toString().isEmpty() || confirmPassword.getText().toString().isEmpty())
                 {
-                    openAlertDialog("Popraw", "Popraw");
+                    openAlertDialog(getResources().getString(R.string.notEnteredLoginOrPassword), getResources().getString(R.string.registerError));
                 }
                 else {
 
                     if (password.getText().toString().equals(confirmPassword.getText().toString())) {
 
                         try {
-                            Comunnication comunnication = new Comunnication();
-                            String result = comunnication.SendAndReceiveMessage(GetRegistrationResultString(username.getText().toString(), password.getText().toString()));
+                            Communication communication = new Communication();
+                            String result = communication.SendAndReceiveMessage(GetRegistrationResultString(username.getText().toString(), password.getText().toString()));
                             JSONObject jsonResult = new JSONObject(result);
 
                             if ((boolean) jsonResult.get("result") == true) {
-                                openAlertDialog("Yes", "Yes");
+                                openAlertDialog(getResources().getString(R.string.registrationWasSuccessful), getResources().getString(R.string.registrationSuccessful));
+                                openNewActivity(Login.class);
                             }
                             else
                             {
-                                openAlertDialog("Nie", "Nie");
+                                openAlertDialog(getResources().getString(R.string.userAlreadyExist), getResources().getString(R.string.registerError));
                             }
 
                         } catch (BadPaddingException e) {
@@ -85,7 +80,7 @@ public class Register extends AppCompatActivity {
                     }
                     else {
 
-                        openAlertDialog("NieHaslo", "NieHaslo");
+                        openAlertDialog(getResources().getString(R.string.passwordsNotTheSame), getResources().getString(R.string.invalidPasswords));
                     }
                 }
             }
@@ -96,7 +91,7 @@ public class Register extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                setContentView(R.layout.login);
+                openNewActivity(Login.class);
             }
         });
     }
@@ -110,8 +105,13 @@ public class Register extends AppCompatActivity {
     }
 
     private void openAlertDialog(String message, String title) {
+
         AlertDialogClass alertDialogClass =  new AlertDialogClass(message, title);
         alertDialogClass.show(getSupportFragmentManager(), "AlertDialogCreator");
     }
 
+    private void openNewActivity(Class activityClass) {
+
+        startActivity(new Intent(this, activityClass));
+    }
 }

@@ -68,19 +68,19 @@
         tools:ignore="TextFields" />
 
     <Button
-        android:id="@+id/backButton"
+        android:id="@+id/registerButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/confirmPassword"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"
-        android:text="@string/register" />
+        android:text="@string/registerNewUser" />
 
     <Button
-        android:id="@+id/registerButton"
+        android:id="@+id/backButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/backButton"
+        android:layout_below="@id/registerButton"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:text="@string/back" />
