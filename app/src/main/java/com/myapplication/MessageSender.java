@@ -21,7 +21,7 @@ public class MessageSender {
     }
 
     public String SendMessage() throws BadPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, JSONException, NoSuchPaddingException, InvalidKeyException {
-        String messageToSend = send.SendPrivateMessage(userId, message.message, message.id, message.dateOfSend);
+        String messageToSend = send.SendPrivateMessage(userId, message.getMessage(), message.getReceiverId(), message.getDate());
 
         return messageToSend;
     }
