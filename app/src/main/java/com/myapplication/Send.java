@@ -13,7 +13,7 @@ public class Send
     private final static String AES_KEY = "p3s6v8y/B?E(H+MbQeThWmZq4t7w!z$C";
     private final static byte[] KEY_IN_BYTES = AES_KEY.getBytes();
 
-    public String Login(String login, String password) throws JSONException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
+    public static String Login(String login, String password) throws JSONException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
 
         byte[] cypherPassword = password.getBytes();
 
@@ -25,7 +25,7 @@ public class Send
         return loginJSON.toString();
     }
 
-    public String Registration(String login, String password) throws JSONException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
+    public static String Registration(String login, String password) throws JSONException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
 
         byte[] cypherPassword = password.getBytes();
 
@@ -37,7 +37,7 @@ public class Send
         return registerJSON.toString();
     }
 
-    public String GetAllGroups(int userId) throws JSONException {
+    public static String GetAllGroups(int userId) throws JSONException {
 
         JSONObject getGroupsJSON = new JSONObject();
         getGroupsJSON.put("id", 3);
@@ -46,7 +46,7 @@ public class Send
         return getGroupsJSON.toString();
     }
 
-    public String GetAllUsers() throws JSONException {
+    public static String GetAllUsers() throws JSONException {
 
         JSONObject getUsersJSON = new JSONObject();
         getUsersJSON.put("id", 4);
@@ -54,7 +54,7 @@ public class Send
         return getUsersJSON.toString();
     }
 
-    public String CreateGroup(String groupName) throws JSONException {
+    public static String CreateGroup(String groupName) throws JSONException {
 
         JSONObject createGroupJSON = new JSONObject();
         createGroupJSON.put("id", 5);
@@ -63,7 +63,7 @@ public class Send
         return createGroupJSON.toString();
     }
 
-    public String AddUserToGroup(int newGroupMemberId, int groupId) throws JSONException {
+    public static String AddUserToGroup(int newGroupMemberId, int groupId) throws JSONException {
 
         JSONObject addUserToGroupJSON = new JSONObject();
         addUserToGroupJSON.put("id", 6);
@@ -73,7 +73,7 @@ public class Send
         return addUserToGroupJSON.toString();
     }
 
-    public String SendPrivateMessage(int authorId, String messageContent, int receiverId, Date date) throws JSONException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
+    public static String SendPrivateMessage(int authorId, String messageContent, int receiverId, Date date) throws JSONException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
 
         byte[] cypherMessageContent = messageContent.getBytes();
 
@@ -87,7 +87,7 @@ public class Send
         return sendPrivateMessageJSON.toString();
     }
 
-    public String SendGroupMessage(int authorId, String messageContent, int groupId, Date date) throws JSONException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
+    public static String SendGroupMessage(int authorId, String messageContent, int groupId, Date date) throws JSONException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
 
         byte[] cypherMessageContent = messageContent.getBytes();
 
@@ -101,7 +101,7 @@ public class Send
         return sendGroupMessageJSON.toString();
     }
 
-    public String GetRecentPrivateMessage(int receiverId, int authorId) throws JSONException {
+    public static String GetRecentPrivateMessage(int receiverId, int authorId) throws JSONException {
 
         JSONObject addUserToGroupJSON = new JSONObject();
         addUserToGroupJSON.put("id", 9);
@@ -111,7 +111,7 @@ public class Send
         return addUserToGroupJSON.toString();
     }
 
-    public String GetAllPrivateMessages(int receiverId, int authorId) throws JSONException {
+    public static String GetAllPrivateMessages(int receiverId, int authorId) throws JSONException {
 
         JSONObject addUserToGroupJSON = new JSONObject();
         addUserToGroupJSON.put("id", 10);
@@ -121,7 +121,7 @@ public class Send
         return addUserToGroupJSON.toString();
     }
 
-    public String GetRecentGroupMessage(int groupId) throws JSONException {
+    public static String GetRecentGroupMessage(int groupId) throws JSONException {
 
         JSONObject addUserToGroupJSON = new JSONObject();
         addUserToGroupJSON.put("id", 11);
@@ -130,7 +130,7 @@ public class Send
         return addUserToGroupJSON.toString();
     }
 
-    public String GetAllGroupMessages(int groupId) throws JSONException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
+    public static String GetAllGroupMessages(int groupId) throws JSONException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
 
         JSONObject addUserToGroupJSON = new JSONObject();
         addUserToGroupJSON.put("id", 12);
@@ -140,7 +140,7 @@ public class Send
     }
 
 
-    public byte[] Encryptor(byte[] message, byte[] keyBytes) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+    public static byte[] Encryptor(byte[] message, byte[] keyBytes) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
 
         Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
         SecretKey secretKey = new SecretKeySpec(keyBytes, "AES");

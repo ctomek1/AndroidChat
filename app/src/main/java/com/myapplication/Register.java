@@ -20,6 +20,8 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
+import lombok.SneakyThrows;
+
 public class Register extends AppCompatActivity {
 
     public Register() {}
@@ -48,34 +50,19 @@ public class Register extends AppCompatActivity {
                     if (password.getText().toString().equals(confirmPassword.getText().toString())) {
                         Thread thread = new Thread(new Runnable() {
 
+                            @SneakyThrows
                             @Override
                             public void run() {
-                                try {
-                                    Communication communication = new Communication();
-                                    String result = communication.SendAndReceiveMessage(GetRegistrationResultString(username.getText().toString(), password.getText().toString()));
-                                    JSONObject jsonResult = new JSONObject(result);
 
-                                    if ((boolean) jsonResult.get("result") == true) {
-                                        openAlertDialog(getResources().getString(R.string.registrationWasSuccessful), getResources().getString(R.string.registrationSuccessful));
-                                        openNewActivity(Login.class);
-                                    } else {
-                                        openAlertDialog(getResources().getString(R.string.userAlreadyExist), getResources().getString(R.string.registerError));
-                                    }
+                                Communication communication = new Communication();
+                                String result = communication.SendAndReceiveMessage(Send.Registration(username.getText().toString(), password.getText().toString()));
+                                JSONObject jsonResult = new JSONObject(result);
 
-                                } catch (BadPaddingException e) {
-                                    e.printStackTrace();
-                                } catch (NoSuchAlgorithmException e) {
-                                    e.printStackTrace();
-                                } catch (IllegalBlockSizeException e) {
-                                    e.printStackTrace();
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                } catch (NoSuchPaddingException e) {
-                                    e.printStackTrace();
-                                } catch (InvalidKeyException e) {
-                                    e.printStackTrace();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
+                                if ((boolean) jsonResult.get("result") == true) {
+                                    openAlertDialog(getResources().getString(R.string.registrationWasSuccessful), getResources().getString(R.string.registrationSuccessful));
+                                    openNewActivity(Login.class);
+                                } else {
+                                    openAlertDialog(getResources().getString(R.string.userAlreadyExist), getResources().getString(R.string.registerError));
                                 }
                             }
                         });
@@ -88,14 +75,6 @@ public class Register extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    private String GetRegistrationResultString(String username, String password) throws BadPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, JSONException, NoSuchPaddingException, InvalidKeyException {
-
-        Send send = new Send();
-        String registerResult = send.Registration(username, password);
-
-        return registerResult;
     }
 
     private void openAlertDialog(String message, String title) {

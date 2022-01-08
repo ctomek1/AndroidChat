@@ -62,30 +62,30 @@ public class ChatActivity extends AppCompatActivity {
         sendButton = findViewById(R.id.imageView);
         sendButton.setClickable(true);
 
-        sendButton.setOnClickListener(
-                v -> {
-                    Message message = new Message();
-                    message.setMessage(messageBox.getText().toString());
-                    messagesList.add(message);
-                    messageSender = new MessageSender(message);
-                    messageReceiver = new MessageReceiver();
-                    String chatMessage = null;
+       sendButton.setOnClickListener(
+            v -> {
+                Message message = new Message();
+                message.setMessage(messageBox.getText().toString());
+                messagesList.add(message);
+                messageSender = new MessageSender(message);
+                messageReceiver = new MessageReceiver();
+                String chatMessage = null;
+                try {
+                    chatMessage = messageSender.SendMessage();
+                } catch (BadPaddingException | NoSuchAlgorithmException | InvalidKeyException | NoSuchPaddingException | JSONException | IllegalBlockSizeException e) {
+                    e.printStackTrace();
+                }
+
+                if(socket.isConnected())
+                {
                     try {
-                        chatMessage = messageSender.SendMessage();
-                    } catch (BadPaddingException | NoSuchAlgorithmException | InvalidKeyException | NoSuchPaddingException | JSONException | IllegalBlockSizeException e) {
+                        out.write(chatMessage);
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
-
-                    if(socket.isConnected())
-                    {
-                        try {
-                            out.write(chatMessage);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    chatAdapter = new ChatAdapter(this, messageList);
-                });
+                }
+                chatAdapter = new ChatAdapter(this, messageList);
+            });
 
     }
 }
