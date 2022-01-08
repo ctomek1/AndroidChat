@@ -9,6 +9,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.myapplication.constants.SessionConstants;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -20,11 +22,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
-import lombok.SneakyThrows;
-
 public class Login extends AppCompatActivity {
-
-    private static int userId;
 
     public Login() {}
 
@@ -43,29 +41,46 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-               // userId = 1;
-               // openNewActivity(MainActivity.class);
+                SessionConstants.USER_ID = 1;
+                openNewActivity(MainActivity.class);
 
                 if (username.getText().toString().isEmpty() || password.getText().toString().isEmpty()) {
                     openAlertDialog(getResources().getString(R.string.notEnteredLoginOrPassword), getResources().getString(R.string.loginError));
                 } else {
                     Thread thread = new Thread(new Runnable() {
 
-                        @SneakyThrows
                         @Override
                         public void run() {
+                            try {
 
-                            Communication communication = new Communication();
-                            String result = communication.SendAndReceiveMessage(Send.Login(username.getText().toString(), password.getText().toString()));
-                            JSONObject jsonResult = new JSONObject(result);
+                                Communication communication = new Communication();
+                                String result = communication.SendAndReceiveMessage(GetLoginResultString(username.getText().toString(), password.getText().toString()));
+                                JSONObject jsonResult = new JSONObject(result);
 
-                            if ((boolean) jsonResult.get("result") == true) {
+                                if ((boolean) jsonResult.get("result") == true) {
 
-                                userId = (int) jsonResult.get("userId");
-                                openNewActivity(MainActivity.class);
-                            } else {
-                                openAlertDialog(getResources().getString(R.string.invalidLoginOrPassword), getResources().getString(R.string.loginError));
+                                    SessionConstants.USER_ID = (int) jsonResult.get("userId");
+                                    openNewActivity(MainActivity.class);
+                                } else {
+                                    openAlertDialog(getResources().getString(R.string.invalidLoginOrPassword), getResources().getString(R.string.loginError));
+                                }
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } catch (NoSuchPaddingException e) {
+                                e.printStackTrace();
+                            } catch (NoSuchAlgorithmException e) {
+                                e.printStackTrace();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            } catch (InvalidKeyException e) {
+                                e.printStackTrace();
+                            } catch (IllegalBlockSizeException e) {
+                                e.printStackTrace();
+                            } catch (BadPaddingException e) {
+                                e.printStackTrace();
                             }
+
                         }
 
                     });
@@ -73,6 +88,7 @@ public class Login extends AppCompatActivity {
                     thread.stop();
                 }
             }
+
         });
 
 
@@ -85,6 +101,14 @@ public class Login extends AppCompatActivity {
         });
     }
 
+    private String GetLoginResultString(String username, String password) throws BadPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, JSONException, NoSuchPaddingException, InvalidKeyException {
+
+        Send send = new Send();
+        String loginResult = send.Login(username, password);
+
+        return loginResult;
+    }
+
     private void openAlertDialog(String message, String title) {
 
         AlertDialogClass alertDialogClass =  new AlertDialogClass(message, title);
@@ -94,9 +118,5 @@ public class Login extends AppCompatActivity {
     private void openNewActivity(Class activityClass) {
 
         startActivity(new Intent(this, activityClass));
-    }
-
-    public static int getUserId() {
-        return userId;
     }
 }
