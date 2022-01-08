@@ -64,7 +64,8 @@ public class ChatActivity extends AppCompatActivity {
 
         sendButton.setOnClickListener(
                 v -> {
-                    Message message = new Message(messageBox.getText().toString());
+                    Message message = new Message();
+                    message.setMessage(messageBox.getText().toString());
                     messagesList.add(message);
                     messageSender = new MessageSender(message);
                     messageReceiver = new MessageReceiver();
