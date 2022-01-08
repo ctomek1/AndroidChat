@@ -22,9 +22,12 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
+import lombok.SneakyThrows;
+
 public class Login extends AppCompatActivity {
 
-    public Login() {}
+    public Login() {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,51 +39,32 @@ public class Login extends AppCompatActivity {
         TextView username = findViewById(R.id.username);
         TextView password = findViewById(R.id.password);
 
-        loginButton.setOnClickListener(new View.OnClickListener()
-        {
+        loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                SessionConstants.USER_ID = 1;
-                openNewActivity(MainActivity.class);
+                /*SessionConstants.USER_ID = 1;
+                openNewActivity(MainActivity.class);*/
 
                 if (username.getText().toString().isEmpty() || password.getText().toString().isEmpty()) {
                     openAlertDialog(getResources().getString(R.string.notEnteredLoginOrPassword), getResources().getString(R.string.loginError));
                 } else {
                     Thread thread = new Thread(new Runnable() {
 
+                        @SneakyThrows
                         @Override
                         public void run() {
-                            try {
+                            Communication communication = new Communication();
+                            String result = communication.SendAndReceiveMessage(GetLoginResultString(username.getText().toString(), password.getText().toString()));
+                            JSONObject jsonResult = new JSONObject(result);
 
-                                Communication communication = new Communication();
-                                String result = communication.SendAndReceiveMessage(GetLoginResultString(username.getText().toString(), password.getText().toString()));
-                                JSONObject jsonResult = new JSONObject(result);
+                            if ((boolean) jsonResult.get("result") == true) {
 
-                                if ((boolean) jsonResult.get("result") == true) {
-
-                                    SessionConstants.USER_ID = (int) jsonResult.get("userId");
-                                    openNewActivity(MainActivity.class);
-                                } else {
-                                    openAlertDialog(getResources().getString(R.string.invalidLoginOrPassword), getResources().getString(R.string.loginError));
-                                }
-
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            } catch (NoSuchPaddingException e) {
-                                e.printStackTrace();
-                            } catch (NoSuchAlgorithmException e) {
-                                e.printStackTrace();
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            } catch (InvalidKeyException e) {
-                                e.printStackTrace();
-                            } catch (IllegalBlockSizeException e) {
-                                e.printStackTrace();
-                            } catch (BadPaddingException e) {
-                                e.printStackTrace();
+                                SessionConstants.USER_ID = (int) jsonResult.get("userId");
+                                openNewActivity(MainActivity.class);
+                            } else {
+                                openAlertDialog(getResources().getString(R.string.invalidLoginOrPassword), getResources().getString(R.string.loginError));
                             }
-
                         }
 
                     });
@@ -92,8 +76,7 @@ public class Login extends AppCompatActivity {
         });
 
 
-        registerButton.setOnClickListener(new View.OnClickListener()
-        {
+        registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openNewActivity(Register.class);
@@ -111,7 +94,7 @@ public class Login extends AppCompatActivity {
 
     private void openAlertDialog(String message, String title) {
 
-        AlertDialogClass alertDialogClass =  new AlertDialogClass(message, title);
+        AlertDialogClass alertDialogClass = new AlertDialogClass(message, title);
         alertDialogClass.show(getSupportFragmentManager(), "AlertDialogCreator");
     }
 
