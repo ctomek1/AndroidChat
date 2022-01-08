@@ -22,7 +22,7 @@ import javax.crypto.NoSuchPaddingException;
 
 public class Login extends AppCompatActivity {
 
-    private int userId;
+    private static int userId;
 
     public Login() {}
 
@@ -40,6 +40,9 @@ public class Login extends AppCompatActivity {
         {
             @Override
             public void onClick(View v) {
+
+                userId = 1;
+                openNewActivity(MainActivity.class);
 
                 if (username.getText().toString().isEmpty() || password.getText().toString().isEmpty()) {
                     openAlertDialog(getResources().getString(R.string.notEnteredLoginOrPassword),  getResources().getString(R.string.loginError));
@@ -107,5 +110,9 @@ public class Login extends AppCompatActivity {
     private void openNewActivity(Class activityClass) {
 
         startActivity(new Intent(this, activityClass));
+    }
+
+    public static int getUserId() {
+        return userId;
     }
 }
