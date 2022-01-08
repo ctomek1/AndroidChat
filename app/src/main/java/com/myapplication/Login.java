@@ -9,6 +9,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.myapplication.constants.SessionConstants;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -21,8 +23,6 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 public class Login extends AppCompatActivity {
-
-    private static int userId;
 
     public Login() {}
 
@@ -41,7 +41,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                userId = 1;
+                SessionConstants.USER_ID = 1;
                 openNewActivity(MainActivity.class);
 
                 if (username.getText().toString().isEmpty() || password.getText().toString().isEmpty()) {
@@ -59,7 +59,7 @@ public class Login extends AppCompatActivity {
 
                                 if ((boolean) jsonResult.get("result") == true) {
 
-                                    userId = (int) jsonResult.get("userId");
+                                    SessionConstants.USER_ID = (int) jsonResult.get("userId");
                                     openNewActivity(MainActivity.class);
                                 } else {
                                     openAlertDialog(getResources().getString(R.string.invalidLoginOrPassword), getResources().getString(R.string.loginError));
@@ -118,9 +118,5 @@ public class Login extends AppCompatActivity {
     private void openNewActivity(Class activityClass) {
 
         startActivity(new Intent(this, activityClass));
-    }
-
-    public static int getUserId() {
-        return userId;
     }
 }
