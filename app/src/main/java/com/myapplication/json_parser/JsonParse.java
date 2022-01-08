@@ -2,9 +2,11 @@ package com.myapplication.json_parser;
 
 import com.myapplication.Group;
 import com.myapplication.Message;
+import com.myapplication.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -53,10 +55,56 @@ public class JsonParse {
         return true;
     }
 
+    public static boolean toUsersContactList(String jsonGroupsArray, List<User> destinationList){
+        List<User> usersContact = new ArrayList<>();
+        JSONArray allGroups,eachGroup;
+        try{
+            allGroups = new JSONArray(jsonGroupsArray);
+            for(int i = 0; i<allGroups.length();i++){
+                eachGroup = new JSONArray(allGroups.getJSONArray(i).toString());
+                User user = new User();
+                user.setId(eachGroup.getJSONArray(0).getInt(1));
+                user.setName(eachGroup.getJSONArray(1).getString(1));
+                usersContact.add(user);
+            }
+            destinationList.addAll(usersContact);
+        }catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 
+    public static boolean toRecentPrivateMessage(String jsonMessage,Message message){
+        JSONObject jmessage;
+        message = new Message();
+        try{
+            jmessage = new JSONObject(jsonMessage);
+            message.setDate(new Date(jmessage.getString("date")));
+            message.setReceiverId(jmessage.getInt("receiverId"));
+            message.setMessage(jmessage.getString("message"));
+            // message.setAuthorId(jmessage.getInt("authorId"));
+        }catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 
-
-
-
+    public static boolean toRecentGroupMessage(String jsonGroupMessage,Message message){
+        JSONObject jmessage;
+        message = new Message();
+        try{
+            jmessage = new JSONObject(jsonGroupMessage);
+            message.setAuthorId(jmessage.getInt("authorId"));
+            message.setDate(new Date(jmessage.getString("date")));
+            message.setReceiverId(jmessage.getInt("groupId"));
+            message.setMessage(jmessage.getString("message"));
+        }catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 
 }

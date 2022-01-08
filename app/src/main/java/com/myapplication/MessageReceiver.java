@@ -19,7 +19,7 @@ public class MessageReceiver {
     }
 
     public String ReceiveMessage() throws BadPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, JSONException, NoSuchPaddingException, InvalidKeyException {
-        String messagesReceived = send.GetAllPrivateMessages(message.id, message.id);
+        String messagesReceived = send.GetAllPrivateMessages(message.getReceiverId(), message.getAuthorId());
 
         return messagesReceived;
     }
