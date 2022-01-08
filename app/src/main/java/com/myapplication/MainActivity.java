@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -22,8 +23,8 @@ public class MainActivity extends AppCompatActivity {
     String[] nicknames;
     String[] descriptions;
     int[] imageId;
-    TextView username;
-    TextView password;
+
+    int userId;
 
     RecyclerView chatRecyclerView;
     String[] messages;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        userId = Login.getUserId();
         createContactsData();
     }
 
@@ -90,12 +92,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onContactsButton(View view){
-        setContentView(R.layout.activity_main);
-        createContactsData();
+
     }
 
-    public void onChatButton(View view){
-        chatActivity = new ChatActivity(new Socket());
-        setContentView(R.layout.chat);
+    public void onGroupButton(View view){
+
     }
 }

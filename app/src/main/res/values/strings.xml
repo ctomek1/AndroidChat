@@ -18,4 +18,6 @@
     <string name="registrationWasSuccessful">Registration was successful</string>
     <string name="invalidPasswords">Invalid passwords</string>
     <string name="passwordsNotTheSame">Passwords are not the same</string>
+    <string name="contactsList">Contacts list</string>
+    <string name="groupsList">Groups list</string>
 </resources>

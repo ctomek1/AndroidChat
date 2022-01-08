@@ -30,7 +30,6 @@ public class Register extends AppCompatActivity {
         setContentView(R.layout.register);
 
         Button registerButton = findViewById(R.id.registerButton);
-        Button backButton = findViewById(R.id.backButton);
         TextView username = findViewById(R.id.username);
         TextView password = findViewById(R.id.password);
         TextView confirmPassword = findViewById(R.id.confirmPassword);
@@ -87,15 +86,6 @@ public class Register extends AppCompatActivity {
                         openAlertDialog(getResources().getString(R.string.passwordsNotTheSame), getResources().getString(R.string.invalidPasswords));
                     }
                 }
-            }
-        });
-
-        backButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v) {
-
-                openNewActivity(Login.class);
             }
         });
     }
