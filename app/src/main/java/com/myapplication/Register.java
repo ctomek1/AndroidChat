@@ -47,36 +47,40 @@ public class Register extends AppCompatActivity {
                 else {
 
                     if (password.getText().toString().equals(confirmPassword.getText().toString())) {
+                        Thread thread = new Thread(new Runnable() {
 
-                        try {
-                            Communication communication = new Communication();
-                            String result = communication.SendAndReceiveMessage(GetRegistrationResultString(username.getText().toString(), password.getText().toString()));
-                            JSONObject jsonResult = new JSONObject(result);
+                            @Override
+                            public void run() {
+                                try {
+                                    Communication communication = new Communication();
+                                    String result = communication.SendAndReceiveMessage(GetRegistrationResultString(username.getText().toString(), password.getText().toString()));
+                                    JSONObject jsonResult = new JSONObject(result);
 
-                            if ((boolean) jsonResult.get("result") == true) {
-                                openAlertDialog(getResources().getString(R.string.registrationWasSuccessful), getResources().getString(R.string.registrationSuccessful));
-                                openNewActivity(Login.class);
+                                    if ((boolean) jsonResult.get("result") == true) {
+                                        openAlertDialog(getResources().getString(R.string.registrationWasSuccessful), getResources().getString(R.string.registrationSuccessful));
+                                        openNewActivity(Login.class);
+                                    } else {
+                                        openAlertDialog(getResources().getString(R.string.userAlreadyExist), getResources().getString(R.string.registerError));
+                                    }
+
+                                } catch (BadPaddingException e) {
+                                    e.printStackTrace();
+                                } catch (NoSuchAlgorithmException e) {
+                                    e.printStackTrace();
+                                } catch (IllegalBlockSizeException e) {
+                                    e.printStackTrace();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                } catch (NoSuchPaddingException e) {
+                                    e.printStackTrace();
+                                } catch (InvalidKeyException e) {
+                                    e.printStackTrace();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             }
-                            else
-                            {
-                                openAlertDialog(getResources().getString(R.string.userAlreadyExist), getResources().getString(R.string.registerError));
-                            }
-
-                        } catch (BadPaddingException e) {
-                            e.printStackTrace();
-                        } catch (NoSuchAlgorithmException e) {
-                            e.printStackTrace();
-                        } catch (IllegalBlockSizeException e) {
-                            e.printStackTrace();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        } catch (NoSuchPaddingException e) {
-                            e.printStackTrace();
-                        } catch (InvalidKeyException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        });
+                        thread.start();
                     }
                     else {
 

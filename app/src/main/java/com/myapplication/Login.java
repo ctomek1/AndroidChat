@@ -42,44 +42,52 @@ public class Login extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (username.getText().toString().isEmpty() || password.getText().toString().isEmpty()) {
-                    openAlertDialog(getResources().getString(R.string.notEnteredLoginOrPassword),  getResources().getString(R.string.loginError));
-                }
-                else
-                {
-                    try {
+                    openAlertDialog(getResources().getString(R.string.notEnteredLoginOrPassword), getResources().getString(R.string.loginError));
+                } else {
+                    Thread thread = new Thread(new Runnable() {
 
-                        Communication communication = new Communication();
-                        String result = communication.SendAndReceiveMessage(GetLoginResultString(username.getText().toString(), password.getText().toString()));
-                        JSONObject jsonResult = new JSONObject(result);
+                        @Override
+                        public void run() {
+                            try {
 
-                        if ((boolean) jsonResult.get("result") == true) {
+                                Communication communication = new Communication();
+                                String result = communication.SendAndReceiveMessage(GetLoginResultString(username.getText().toString(), password.getText().toString()));
+                                JSONObject jsonResult = new JSONObject(result);
 
-                            userId = (int) jsonResult.get("userId");
-                            openNewActivity(MainActivity.class);
+                                if ((boolean) jsonResult.get("result") == true) {
+
+                                    userId = (int) jsonResult.get("userId");
+                                    openNewActivity(MainActivity.class);
+                                } else {
+                                    openAlertDialog(getResources().getString(R.string.invalidLoginOrPassword), getResources().getString(R.string.loginError));
+                                }
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } catch (NoSuchPaddingException e) {
+                                e.printStackTrace();
+                            } catch (NoSuchAlgorithmException e) {
+                                e.printStackTrace();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            } catch (InvalidKeyException e) {
+                                e.printStackTrace();
+                            } catch (IllegalBlockSizeException e) {
+                                e.printStackTrace();
+                            } catch (BadPaddingException e) {
+                                e.printStackTrace();
+                            }
+
                         }
-                        else
-                        {
-                            openAlertDialog(getResources().getString(R.string.invalidLoginOrPassword), getResources().getString(R.string.loginError));
-                        }
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (NoSuchPaddingException e) {
-                        e.printStackTrace();
-                    } catch (NoSuchAlgorithmException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    } catch (InvalidKeyException e) {
-                        e.printStackTrace();
-                    } catch (IllegalBlockSizeException e) {
-                        e.printStackTrace();
-                    } catch (BadPaddingException e) {
-                        e.printStackTrace();
-                    }
+                    });
+                    thread.start();
+                    thread.stop();
                 }
             }
+
         });
+
 
         registerButton.setOnClickListener(new View.OnClickListener()
         {

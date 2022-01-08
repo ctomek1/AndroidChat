@@ -44,7 +44,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     public ChatActivity() throws IOException {
-        socket = new Socket("ip", 0);
+        socket = new Socket("192.168.0.15", 2137);
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         this.out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
     }
