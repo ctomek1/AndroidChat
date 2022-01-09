@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.myapplication.constants.SessionConstants;
 import com.myapplication.ChatActivity;
 import com.myapplication.Communication;
 import com.myapplication.Group;
@@ -33,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
     Button groupsButton;
     TextView listName;
 
-
     ArrayList<User> contactsList = new ArrayList<>();
     ArrayList<Group> groupsList = new ArrayList<>();
 
@@ -52,30 +50,29 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         contactsButton = findViewById(R.id.contactsListButton);
         groupsButton = findViewById(R.id.groupsListButton);
-        listName = (TextView) findViewById(R.id.listName);
+        listName = findViewById(R.id.listName);
         recyclerView = findViewById(R.id.contactsList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
+        // Communication communication = new Communication();
 
-        Communication communication = new Communication();
-/*
-        contactsList.add(new User(1, "sieeeema"));
-        groupsList.add(new Group(1, "ellooo"));*/
+        contactsList.add(new User(1, "Użytkownik"));
+        groupsList.add(new Group(1, "Grupa"));
 
-        getContactsData(communication);
-        getGroupsData(communication);
+        // getContactsData(communication);
+        // getGroupsData(communication);
 
-        contactsButton.setOnClickListener(new View.OnClickListener()
-        {
+        onContactsButton();
+
+        contactsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onContactsButton();
             }
         });
 
-        groupsButton.setOnClickListener(new View.OnClickListener()
-        {
+        groupsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onGroupButton();
@@ -134,11 +131,13 @@ public class MainActivity extends AppCompatActivity {
     }*/
 
     public void onContactsButton() {
+        listName.setText(getResources().getString(R.string.contactsList));
         contactsListAdapter = new ContactsListAdapter(this, contactsList);
         recyclerView.setAdapter(contactsListAdapter);
     }
 
     public void onGroupButton() {
+        listName.setText(getResources().getString(R.string.groupsList));
         groupsListAdapter = new GroupsListAdapter(this, groupsList);
         recyclerView.setAdapter(groupsListAdapter);
     }

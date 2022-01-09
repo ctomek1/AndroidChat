@@ -14,8 +14,6 @@ import javax.crypto.NoSuchPaddingException;
 public class MessageSender {
 
     Message message;
-    Send send = new Send();
-
 
     public MessageSender(Message message)
     {
@@ -23,7 +21,7 @@ public class MessageSender {
     }
 
     public String SendMessage() throws BadPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, JSONException, NoSuchPaddingException, InvalidKeyException {
-        String messageToSend = send.SendPrivateMessage(SessionConstants.USER_ID, message.getMessage(), message.getReceiverId(), message.getDate());
+        String messageToSend = Send.SendPrivateMessage(SessionConstants.USER_ID, message.getMessage(), message.getReceiverId(), message.getDate());
 
         return messageToSend;
     }
