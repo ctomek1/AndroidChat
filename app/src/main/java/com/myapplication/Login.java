@@ -9,6 +9,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.myapplication.constants.SessionConstants;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,9 +26,8 @@ import lombok.SneakyThrows;
 
 public class Login extends AppCompatActivity {
 
-    private static int userId;
-
-    public Login() {}
+    public Login() {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,13 +39,12 @@ public class Login extends AppCompatActivity {
         TextView username = findViewById(R.id.username);
         TextView password = findViewById(R.id.password);
 
-        loginButton.setOnClickListener(new View.OnClickListener()
-        {
+        loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-               // userId = 1;
-               // openNewActivity(MainActivity.class);
+                /*SessionConstants.USER_ID = 1;
+                openNewActivity(MainActivity.class);*/
 
                 if (username.getText().toString().isEmpty() || password.getText().toString().isEmpty()) {
                     openAlertDialog(getResources().getString(R.string.notEnteredLoginOrPassword), getResources().getString(R.string.loginError));
@@ -54,14 +54,13 @@ public class Login extends AppCompatActivity {
                         @SneakyThrows
                         @Override
                         public void run() {
-
                             Communication communication = new Communication();
-                            String result = communication.SendAndReceiveMessage(Send.Login(username.getText().toString(), password.getText().toString()));
+                            String result = communication.SendAndReceiveMessage(GetLoginResultString(username.getText().toString(), password.getText().toString()));
                             JSONObject jsonResult = new JSONObject(result);
 
                             if ((boolean) jsonResult.get("result") == true) {
 
-                                userId = (int) jsonResult.get("userId");
+                                SessionConstants.USER_ID = (int) jsonResult.get("userId");
                                 openNewActivity(MainActivity.class);
                             } else {
                                 openAlertDialog(getResources().getString(R.string.invalidLoginOrPassword), getResources().getString(R.string.loginError));
@@ -73,11 +72,11 @@ public class Login extends AppCompatActivity {
                     thread.stop();
                 }
             }
+
         });
 
 
-        registerButton.setOnClickListener(new View.OnClickListener()
-        {
+        registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openNewActivity(Register.class);
@@ -85,18 +84,22 @@ public class Login extends AppCompatActivity {
         });
     }
 
+    private String GetLoginResultString(String username, String password) throws BadPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, JSONException, NoSuchPaddingException, InvalidKeyException {
+
+        Send send = new Send();
+        String loginResult = send.Login(username, password);
+
+        return loginResult;
+    }
+
     private void openAlertDialog(String message, String title) {
 
-        AlertDialogClass alertDialogClass =  new AlertDialogClass(message, title);
+        AlertDialogClass alertDialogClass = new AlertDialogClass(message, title);
         alertDialogClass.show(getSupportFragmentManager(), "AlertDialogCreator");
     }
 
     private void openNewActivity(Class activityClass) {
 
         startActivity(new Intent(this, activityClass));
-    }
-
-    public static int getUserId() {
-        return userId;
     }
 }

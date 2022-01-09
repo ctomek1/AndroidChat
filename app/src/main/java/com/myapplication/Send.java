@@ -3,13 +3,13 @@ package com.myapplication;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+
 import org.json.*;
 
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
 
-public class Send
-{
+public class Send {
     private final static String AES_KEY = "p3s6v8y/B?E(H+MbQeThWmZq4t7w!z$C";
     private final static byte[] KEY_IN_BYTES = AES_KEY.getBytes();
 

@@ -24,7 +24,8 @@ import lombok.SneakyThrows;
 
 public class Register extends AppCompatActivity {
 
-    public Register() {}
+    public Register() {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,16 +37,13 @@ public class Register extends AppCompatActivity {
         TextView password = findViewById(R.id.password);
         TextView confirmPassword = findViewById(R.id.confirmPassword);
 
-        registerButton.setOnClickListener(new View.OnClickListener()
-        {
+        registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (username.getText().toString().isEmpty() || password.getText().toString().isEmpty() || confirmPassword.getText().toString().isEmpty())
-                {
+                if (username.getText().toString().isEmpty() || password.getText().toString().isEmpty() || confirmPassword.getText().toString().isEmpty()) {
                     openAlertDialog(getResources().getString(R.string.notEnteredLoginOrPassword), getResources().getString(R.string.registerError));
-                }
-                else {
+                } else {
 
                     if (password.getText().toString().equals(confirmPassword.getText().toString())) {
                         Thread thread = new Thread(new Runnable() {
@@ -67,8 +65,7 @@ public class Register extends AppCompatActivity {
                             }
                         });
                         thread.start();
-                    }
-                    else {
+                    } else {
 
                         openAlertDialog(getResources().getString(R.string.passwordsNotTheSame), getResources().getString(R.string.invalidPasswords));
                     }
@@ -79,7 +76,7 @@ public class Register extends AppCompatActivity {
 
     private void openAlertDialog(String message, String title) {
 
-        AlertDialogClass alertDialogClass =  new AlertDialogClass(message, title);
+        AlertDialogClass alertDialogClass = new AlertDialogClass(message, title);
         alertDialogClass.show(getSupportFragmentManager(), "AlertDialogCreator");
     }
 
