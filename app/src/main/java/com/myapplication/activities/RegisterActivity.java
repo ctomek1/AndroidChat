@@ -1,4 +1,4 @@
-package com.myapplication;
+package com.myapplication.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,25 +6,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.json.JSONException;
+import com.myapplication.AlertDialogClass;
+import com.myapplication.Communication;
+import com.myapplication.R;
+import com.myapplication.Send;
+
 import org.json.JSONObject;
-
-import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
 import lombok.SneakyThrows;
 
-public class Register extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity {
 
-    public Register() {
+    public RegisterActivity() {
     }
 
     @Override
@@ -58,7 +53,7 @@ public class Register extends AppCompatActivity {
 
                                 if ((boolean) jsonResult.get("result") == true) {
                                     openAlertDialog(getResources().getString(R.string.registrationWasSuccessful), getResources().getString(R.string.registrationSuccessful));
-                                    openNewActivity(Login.class);
+                                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                                 } else {
                                     openAlertDialog(getResources().getString(R.string.userAlreadyExist), getResources().getString(R.string.registerError));
                                 }
@@ -78,10 +73,5 @@ public class Register extends AppCompatActivity {
 
         AlertDialogClass alertDialogClass = new AlertDialogClass(message, title);
         alertDialogClass.show(getSupportFragmentManager(), "AlertDialogCreator");
-    }
-
-    private void openNewActivity(Class activityClass) {
-
-        startActivity(new Intent(this, activityClass));
     }
 }

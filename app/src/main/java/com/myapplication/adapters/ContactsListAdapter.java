@@ -1,4 +1,4 @@
-package com.myapplication;
+package com.myapplication.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,7 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.imageview.ShapeableImageView;
+import com.myapplication.R;
+import com.myapplication.User;
 
 import java.util.ArrayList;
 
@@ -26,8 +27,8 @@ public class ContactsListAdapter extends RecyclerView.Adapter<ContactsListAdapte
     @NonNull
     @Override
     public ContactsListAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context).inflate(R.layout.contact,parent, false);
 
+        View v = LayoutInflater.from(context).inflate(R.layout.list_layout, parent, false);
         return new MyViewHolder(v);
     }
 
@@ -35,7 +36,7 @@ public class ContactsListAdapter extends RecyclerView.Adapter<ContactsListAdapte
     public void onBindViewHolder(@NonNull ContactsListAdapter.MyViewHolder holder, int position) {
 
         User user = contactsList.get(position);
-        holder.username.setText(user.getName());
+        holder.contactsListElement.setText(user.getName());
     }
 
     @Override
@@ -43,13 +44,20 @@ public class ContactsListAdapter extends RecyclerView.Adapter<ContactsListAdapte
         return contactsList.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder{
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView username;
+        TextView contactsListElement;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            username = itemView.findViewById(R.id.username);
+            contactsListElement = itemView.findViewById(R.id.listElement);
+
+            contactsListElement.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int i = 2;
+                }
+            });
         }
     }
 }

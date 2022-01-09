@@ -1,4 +1,4 @@
-package com.myapplication;
+package com.myapplication.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -7,7 +7,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
+import com.myapplication.ChatActivity;
+import com.myapplication.Communication;
+import com.myapplication.Group;
+import com.myapplication.Message;
+import com.myapplication.R;
+import com.myapplication.Send;
+import com.myapplication.User;
+import com.myapplication.adapters.ContactsListAdapter;
+import com.myapplication.adapters.GroupsListAdapter;
+import com.myapplication.constants.SessionConstants;
 import com.myapplication.json_parser.JsonParse;
 
 import java.util.ArrayList;
@@ -19,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     Button contactsButton;
     Button groupsButton;
+    TextView listName;
 
     int userId;
     ArrayList<User> contactsList = new ArrayList<>();
@@ -39,30 +51,31 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         contactsButton = findViewById(R.id.contactsListButton);
         groupsButton = findViewById(R.id.groupsListButton);
+        listName = (TextView) findViewById(R.id.listName);
         recyclerView = findViewById(R.id.contactsList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
-        userId = Login.getUserId();
+        userId = SessionConstants.USER_ID;
 
-        Communication communication = new Communication();
-/*
-        contactsList.add(new User(1, "sieeeema"));
-        groupsList.add(new Group(1, "ellooo"));*/
+        // Communication communication = new Communication();
 
-        getContactsData(communication);
-        getGroupsData(communication);
+        contactsList.add(new User(1, "Użytkownik"));
+        groupsList.add(new Group(1, "Grupa"));
 
-        contactsButton.setOnClickListener(new View.OnClickListener()
-        {
+        // getContactsData(communication);
+        // getGroupsData(communication);
+
+        onContactsButton();
+
+        contactsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onContactsButton();
             }
         });
 
-        groupsButton.setOnClickListener(new View.OnClickListener()
-        {
+        groupsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onGroupButton();
@@ -121,11 +134,13 @@ public class MainActivity extends AppCompatActivity {
     }*/
 
     public void onContactsButton() {
+        listName.setText(getResources().getString(R.string.contactsList));
         contactsListAdapter = new ContactsListAdapter(this, contactsList);
         recyclerView.setAdapter(contactsListAdapter);
     }
 
     public void onGroupButton() {
+        listName.setText(getResources().getString(R.string.groupsList));
         groupsListAdapter = new GroupsListAdapter(this, groupsList);
         recyclerView.setAdapter(groupsListAdapter);
     }

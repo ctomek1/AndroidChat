@@ -24,22 +24,20 @@ public class Communication {
             output = new PrintWriter(out);
             //this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             //this.out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-        }catch(Exception e){
+        } catch (Exception e) {
             throw e;
         }
     }
 
     public String SendAndReceiveMessage(String messageToSend) {
         String receivedMessage = "";
-        if(socket.isConnected())
-        {
+        if (socket.isConnected()) {
             try {
-               // socket.se
 
                 output.write(messageToSend);
                 output.flush();
                 receivedMessage = in.readLine();
-               int i = 0;
+                int i = 0;
             } catch (IOException e) {
                 e.printStackTrace();
             }
