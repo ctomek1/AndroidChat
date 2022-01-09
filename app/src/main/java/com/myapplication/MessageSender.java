@@ -1,5 +1,7 @@
 package com.myapplication;
 
+import com.myapplication.constants.SessionConstants;
+
 import org.json.JSONException;
 
 import java.security.InvalidKeyException;
@@ -13,7 +15,7 @@ public class MessageSender {
 
     Message message;
     Send send = new Send();
-    int userId = 1;
+
 
     public MessageSender(Message message)
     {
@@ -21,7 +23,7 @@ public class MessageSender {
     }
 
     public String SendMessage() throws BadPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, JSONException, NoSuchPaddingException, InvalidKeyException {
-        String messageToSend = send.SendPrivateMessage(userId, message.getMessage(), message.getReceiverId(), message.getDate());
+        String messageToSend = send.SendPrivateMessage(SessionConstants.USER_ID, message.getMessage(), message.getReceiverId(), message.getDate());
 
         return messageToSend;
     }
