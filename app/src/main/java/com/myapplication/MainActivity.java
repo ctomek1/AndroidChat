@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.myapplication.constants.SessionConstants;
 import com.myapplication.json_parser.JsonParse;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     Button contactsButton;
     Button groupsButton;
 
-    int userId;
+
     ArrayList<User> contactsList = new ArrayList<>();
     ArrayList<Group> groupsList = new ArrayList<>();
 
@@ -43,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
-        userId = Login.getUserId();
 
         Communication communication = new Communication();
 /*
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
             @SneakyThrows
             @Override
             public void run() {
-                String result = communication.SendAndReceiveMessage(Send.GetAllGroups(userId));
+                String result = communication.SendAndReceiveMessage(Send.GetAllGroups(SessionConstants.USER_ID));
                 JsonParse.toUsersGroupsList(result, groupsList);
             }
         });

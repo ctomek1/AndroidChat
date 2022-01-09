@@ -12,8 +12,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import lombok.SneakyThrows;
+
+
 public class JsonParse {
 
+    @SneakyThrows
     public static boolean toPrivateMessageList(String jsonMessageArray, List<Message> destinationList){
         List<Message> msgl = new ArrayList<>();
         JSONArray allMessage,singleMessage;

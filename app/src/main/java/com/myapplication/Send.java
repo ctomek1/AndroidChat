@@ -1,6 +1,7 @@
 package com.myapplication;
 
 import java.security.InvalidKeyException;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
@@ -13,26 +14,26 @@ public class Send {
     private final static String AES_KEY = "p3s6v8y/B?E(H+MbQeThWmZq4t7w!z$C";
     private final static byte[] KEY_IN_BYTES = AES_KEY.getBytes();
 
-    public static String Login(String login, String password) throws JSONException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
+    public static String Login(String login, String password) throws JSONException, NoSuchAlgorithmException {
 
-        byte[] cypherPassword = password.getBytes();
+        byte[] bytesPassword = password.getBytes();
 
         JSONObject loginJSON = new JSONObject();
         loginJSON.put("id", 1);
         loginJSON.put("login", login);
-        loginJSON.put("password", Encryptor(cypherPassword, KEY_IN_BYTES).toString());
+        loginJSON.put("password", new String(PasswordCombiner(bytesPassword)));
 
         return loginJSON.toString();
     }
 
-    public static String Registration(String login, String password) throws JSONException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
+    public static String Registration(String login, String password) throws JSONException, NoSuchAlgorithmException {
 
-        byte[] cypherPassword = password.getBytes();
+        byte[] bytesPassword = password.getBytes();
 
         JSONObject registerJSON = new JSONObject();
         registerJSON.put("id", 2);
         registerJSON.put("login", login);
-        registerJSON.put("password", Encryptor(cypherPassword, KEY_IN_BYTES).toString());
+        registerJSON.put("password", new String(PasswordCombiner(bytesPassword)));
 
         return registerJSON.toString();
     }
@@ -81,7 +82,7 @@ public class Send {
         sendPrivateMessageJSON.put("id", 7);
         sendPrivateMessageJSON.put("authorId", authorId);
         sendPrivateMessageJSON.put("receiverId", receiverId);
-        sendPrivateMessageJSON.put("messageContent", Encryptor(cypherMessageContent, KEY_IN_BYTES).toString());
+        sendPrivateMessageJSON.put("messageContent", new String(Encryptor(cypherMessageContent, KEY_IN_BYTES)));
         sendPrivateMessageJSON.put("date", date);
 
         return sendPrivateMessageJSON.toString();
@@ -95,7 +96,7 @@ public class Send {
         sendGroupMessageJSON.put("id", 8);
         sendGroupMessageJSON.put("authorId", authorId);
         sendGroupMessageJSON.put("groupId", groupId);
-        sendGroupMessageJSON.put("messageContent", Encryptor(cypherMessageContent, KEY_IN_BYTES).toString());
+        sendGroupMessageJSON.put("messageContent",new String(Encryptor(cypherMessageContent, KEY_IN_BYTES)));
         sendGroupMessageJSON.put("dateOfSend", date);
 
         return sendGroupMessageJSON.toString();
@@ -130,7 +131,7 @@ public class Send {
         return addUserToGroupJSON.toString();
     }
 
-    public static String GetAllGroupMessages(int groupId) throws JSONException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
+    public static String GetAllGroupMessages(int groupId) throws JSONException {
 
         JSONObject addUserToGroupJSON = new JSONObject();
         addUserToGroupJSON.put("id", 12);
@@ -146,6 +147,13 @@ public class Send {
         SecretKey secretKey = new SecretKeySpec(keyBytes, "AES");
         cipher.init(Cipher.ENCRYPT_MODE, secretKey);
         return cipher.doFinal(message);
+    }
+
+    public static byte[] PasswordCombiner(byte[] password) throws NoSuchAlgorithmException {
+        MessageDigest messageDigest = null;
+        messageDigest = MessageDigest.getInstance("SHA-256");
+        messageDigest.update(password);
+        return messageDigest.digest();
     }
 
 }
