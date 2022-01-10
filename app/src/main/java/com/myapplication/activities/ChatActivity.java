@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,6 +30,7 @@ public class ChatActivity extends AppCompatActivity {
     ChatAdapter chatAdapter;
     Button sendButton;
     Button refreshButton;
+    TextView nameChat;
 
     public ChatActivity() {
     }
@@ -37,20 +39,27 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         ArrayList<Message> messagesList = new ArrayList<>();
+
+        chatRecyclerView = findViewById(R.id.chatRecyclerView);
+        chatRecyclerView.setAdapter(chatAdapter);
+        messageBox = findViewById(R.id.message);
+        sendButton = findViewById(R.id.sendButton);
+        refreshButton = findViewById(R.id.refreshButton);
+        nameChat = findViewById(R.id.nameChat);
 
         if (SessionConstants.IS_USER_CHAT) {
             setContentView(R.layout.users_chat);
+            nameChat.setText(SessionConstants.CURRENT_RECEIVER_NAME);
 
             Thread thread = new Thread(new Runnable() {
                 @SneakyThrows
                 @Override
                 public void run() {
                     Communication communication = new Communication();
-                    if (communication.getSocket() != null) {
+                    if (communication.getSocket().isConnected()) {
                         String privateMessages = communication.SendAndReceiveMessage(CreateJSONsWithData.GetAllPrivateMessages(SessionConstants.CURRENT_RECEIVER_ID, SessionConstants.USER_ID));
-                        JsonParse.toPrivateMessageList(privateMessages, messagesList);
+                        JsonParse.toMessageList(privateMessages, messagesList);
                     }
                 }
             });
@@ -59,51 +68,73 @@ public class ChatActivity extends AppCompatActivity {
         } else {
             setContentView(R.layout.group_chat);
             setAddUserButton();
+            nameChat.setText(SessionConstants.CURRENT_GROUP_NAME);
 
             Thread thread = new Thread(new Runnable() {
                 @SneakyThrows
                 @Override
                 public void run() {
                     Communication communication = new Communication();
-                    if (communication.getSocket() != null) {
+                    if (communication.getSocket().isConnected()) {
                         String groupMessages = communication.SendAndReceiveMessage(CreateJSONsWithData.GetAllGroupMessages(SessionConstants.CURRENT_GROUP_ID));
-                        JsonParse.toPrivateMessageList(groupMessages, messagesList);
+                        JsonParse.toMessageList(groupMessages, messagesList);
                     }
                 }
             });
             thread.start();
         }
 
-        chatRecyclerView = findViewById(R.id.chatRecyclerView);
-        chatRecyclerView.setAdapter(chatAdapter);
-        messageBox = findViewById(R.id.message);
-        sendButton = findViewById(R.id.sendButton);
-        refreshButton = findViewById((R.id.refreshButton));
-
         sendButton.setOnClickListener(
                 v -> {
-                    Message message = new Message();
-                    message.setMessage(messageBox.getText().toString());
-                    message.setAuthorId(SessionConstants.USER_ID);
-                    message.setReceiverId(SessionConstants.CURRENT_RECEIVER_ID);
-                    //     message.setDate(java.time.LocalDate.Now());
+
 
                     Thread thread = new Thread(new Runnable() {
                         @SneakyThrows
                         @Override
                         public void run() {
                             Communication communication = new Communication();
-                            if (communication.getSocket() != null) {
-                                String result = communication.SendAndReceiveMessage(CreateJSONsWithData.SendPrivateMessage(SessionConstants.USER_ID, message.getMessage(), message.getReceiverId(), message.getDate()));
-                                JSONObject jsonResult = new JSONObject(result);
-                                Boolean isMessageHasBeenSend = jsonResult.getBoolean("result") == true;
+                            if (communication.getSocket().isConnected()) {
 
-                                if (isMessageHasBeenSend) {
-                                    ArrayList<Message> newMessages = new ArrayList<>();
-                                    newMessages.add(message);
+                                if (SessionConstants.IS_USER_CHAT) {
 
-                                    chatAdapter = new ChatAdapter(SessionConstants.CONTEXT, newMessages);
+                                    Message message = new Message();
+                                    message.setMessage(messageBox.getText().toString());
+                                    message.setAuthorId(SessionConstants.USER_ID);
+                                    message.setReceiverId(SessionConstants.CURRENT_RECEIVER_ID);
+                                    //     message.setDate(java.time.LocalDate.Now());
+
+                                    String result = communication.SendAndReceiveMessage(CreateJSONsWithData.SendPrivateMessage(SessionConstants.USER_ID, message.getMessage(), message.getReceiverId(), message.getDate()));
+                                    JSONObject jsonResult = new JSONObject(result);
+                                    Boolean isMessageHasBeenSend = jsonResult.getBoolean("result") == true;
+
+                                    if (isMessageHasBeenSend) {
+                                        ArrayList<Message> newMessages = new ArrayList<>();
+                                        newMessages.add(message);
+
+                                        chatAdapter = new ChatAdapter(SessionConstants.CONTEXT, newMessages);
+                                    }
+
+                                } else {
+
+                                    Message message = new Message();
+                                    message.setMessage(messageBox.getText().toString());
+                                    message.setAuthorId(SessionConstants.USER_ID);
+                                    message.setReceiverId(SessionConstants.CURRENT_GROUP_ID);
+                                    //     message.setDate(java.time.LocalDate.Now());
+
+                                    String result = communication.SendAndReceiveMessage(CreateJSONsWithData.SendGroupMessage(SessionConstants.USER_ID, message.getMessage(), message.getReceiverId(), message.getDate()));
+                                    JSONObject jsonResult = new JSONObject(result);
+                                    Boolean isMessageHasBeenSend = jsonResult.getBoolean("result") == true;
+
+                                    if (isMessageHasBeenSend) {
+                                        ArrayList<Message> newMessages = new ArrayList<>();
+                                        newMessages.add(message);
+
+                                        chatAdapter = new ChatAdapter(SessionConstants.CONTEXT, newMessages);
+                                    }
                                 }
+
+
                             }
                         }
                     });
@@ -119,7 +150,7 @@ public class ChatActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             Communication communication = new Communication();
-                            if (communication.getSocket() != null) {
+                            if (communication.getSocket().isConnected()) {
                                 if (SessionConstants.IS_USER_CHAT) {
 
                                     String result = communication.SendAndReceiveMessage(CreateJSONsWithData.GetRecentPrivateMessage(SessionConstants.CURRENT_RECEIVER_ID, SessionConstants.USER_ID));

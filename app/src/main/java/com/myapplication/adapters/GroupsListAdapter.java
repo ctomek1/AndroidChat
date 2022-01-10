@@ -61,6 +61,7 @@ public class GroupsListAdapter extends RecyclerView.Adapter<GroupsListAdapter.My
                     TextView textView = (TextView) v;
                     SessionConstants.IS_USER_CHAT = false;
                     SessionConstants.CURRENT_GROUP_ID = getIdOfGroupFromName(textView.getText().toString());
+                    SessionConstants.CURRENT_GROUP_NAME = textView.getText().toString();
                     context.startActivity(new Intent(context, ChatActivity.class));
                 }
             });

@@ -40,6 +40,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                SessionConstants.USER_ID = 1;
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+
                 if (username.getText().toString().isEmpty() || password.getText().toString().isEmpty()) {
                     openAlertDialog(getResources().getString(R.string.notEnteredLoginOrPassword), getResources().getString(R.string.loginError));
                 } else {
@@ -49,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             Communication communication = new Communication();
-                            if (communication.getSocket() != null) {
+                            if (communication.getSocket().isConnected()) {
                                 String result = communication.SendAndReceiveMessage(CreateJSONsWithData.Login(username.getText().toString(), password.getText().toString()));
                                 JSONObject jsonResult = new JSONObject(result);
 
@@ -65,7 +68,6 @@ public class LoginActivity extends AppCompatActivity {
 
                     });
                     thread.start();
-                    thread.stop();
                 }
             }
 

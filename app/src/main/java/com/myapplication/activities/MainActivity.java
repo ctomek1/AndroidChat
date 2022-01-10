@@ -59,10 +59,18 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
+
+        usersList.add(new User(2, "User1"));
+        usersList.add(new User(3, "User2"));
+
+        groupsList.add(new Group(1, "Group1"));
+        groupsList.add(new Group(2, "Group2"));
+
         getContactsData();
         getGroupsData();
 
         setUsersListToAdapter();
+        createGroupButton.setVisibility(View.INVISIBLE);
 
         contactsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
 
                 Communication communication = new Communication();
-                if (communication.getSocket() != null) {
+                if (communication.getSocket().isConnected()) {
                     String result = communication.SendAndReceiveMessage(CreateJSONsWithData.GetAllUsers());
                     JsonParse.toUsersList(result, usersList);
                 }

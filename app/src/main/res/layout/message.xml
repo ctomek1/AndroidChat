@@ -9,20 +9,33 @@
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight = "true"
-        android:layout_marginRight = "5dp"
-        android:layout_marginTop = "5dp">
+        android:layout_height="28dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp">
+
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/textMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="-1dp"
+        android:layout_toEndOf="@+id/authorOfMessage"
         android:padding="10dp"
-        android:text="tekst"
+        android:text="message"
         android:textColor="@color/black"
-        android:textSize="18sp"/>
+        android:textSize="18sp" />
 
-    </RelativeLayout>
-
+    <TextView
+        android:id="@+id/authorOfMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp"
+        android:background="@drawable/border"
+        android:padding="10dp"
+        android:text="author:"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
 </RelativeLayout>

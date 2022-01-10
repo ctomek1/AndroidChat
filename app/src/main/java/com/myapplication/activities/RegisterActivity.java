@@ -49,7 +49,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                                 Communication communication = new Communication();
 
-                                if (communication.getSocket() != null) {
+                                if (communication.getSocket().isConnected()) {
                                     String result = communication.SendAndReceiveMessage(CreateJSONsWithData.Registration(username.getText().toString(), password.getText().toString()));
                                     JSONObject jsonResult = new JSONObject(result);
 

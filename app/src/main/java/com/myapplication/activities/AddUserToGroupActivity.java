@@ -37,8 +37,8 @@ public class AddUserToGroupActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
-        usersList.add(new User(1, "Użytkownik"));
-        usersList.add(new User(2, "Użytkownik2"));
+        usersList.add(new User(2, "User1"));
+        usersList.add(new User(3, "User2"));
 
         getContactsData();
         setUsersListToAdapter();
@@ -52,7 +52,7 @@ public class AddUserToGroupActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Communication communication = new Communication();
-                if (communication.getSocket() != null) {
+                if (communication.getSocket().isConnected()) {
                     String result = communication.SendAndReceiveMessage(CreateJSONsWithData.GetAllUsers());
                 }
             }

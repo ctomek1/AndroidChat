@@ -43,7 +43,7 @@
         android:layout_marginBottom="10dp"
         android:background="#30cc"
         android:hint="@string/password"
-        android:inputType="text"
+        android:inputType="textPassword"
         android:minHeight="48dp"
         android:padding="10dp"
         tools:ignore="TextFields" />

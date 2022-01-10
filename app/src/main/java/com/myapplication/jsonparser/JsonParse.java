@@ -28,7 +28,7 @@ import lombok.SneakyThrows;
 public class JsonParse {
 
     @SneakyThrows
-    public static boolean toPrivateMessageList(String jsonMessageArray, List<Message> destinationList) {
+    public static boolean toMessageList(String jsonMessageArray, List<Message> destinationList) {
         List<Message> msgl = new ArrayList<>();
         JSONArray allMessage, singleMessage;
         try {
@@ -85,11 +85,11 @@ public class JsonParse {
         JSONObject jmessage;
         message = new Message();
         jmessage = new JSONObject(jsonMessage);
+
         message.setDate(new Date(jmessage.getString("date")));
         message.setReceiverId(jmessage.getInt("receiverId"));
         message.setMessage(new String(Decryptor(jmessage.getString("message").getBytes(), SessionConstants.KEY_IN_BYTES)));
-        // message.setAuthorId(jmessage.getInt("authorId"));
-
+        message.setAuthorId(jmessage.getInt("authorId"));
         return true;
     }
 

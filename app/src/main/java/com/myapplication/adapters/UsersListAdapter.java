@@ -62,6 +62,7 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.MyVi
                     TextView textView = (TextView) v;
                     SessionConstants.IS_USER_CHAT = true;
                     SessionConstants.CURRENT_RECEIVER_ID = getIdOfUserFromName(textView.getText().toString());
+                    SessionConstants.CURRENT_RECEIVER_NAME = textView.getText().toString();
                     context.startActivity(new Intent(context, ChatActivity.class));
                 }
             });

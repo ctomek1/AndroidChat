@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.myapplication.constants.SessionConstants;
 import com.myapplication.models.Message;
 import com.myapplication.R;
 
@@ -35,7 +36,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessagesViewHo
     public void onBindViewHolder(@NonNull ChatAdapter.MessagesViewHolder holder, int position) {
 
         Message message = messagesList.get(position);
-        // holder.message.setText(message.message);
+        holder.message.setText(message.getMessage());
+        holder.author.setText(message.getAuthorName());
     }
 
     @Override
@@ -46,10 +48,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessagesViewHo
     public static class MessagesViewHolder extends RecyclerView.ViewHolder {
 
         TextView message;
+        TextView author;
 
         public MessagesViewHolder(@NonNull View itemView) {
             super(itemView);
             message = itemView.findViewById(R.id.textMessage);
+            author = itemView.findViewById(R.id.authorOfMessage);
         }
     }
 }
