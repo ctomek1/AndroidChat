@@ -23,24 +23,25 @@ public class InputTextDialogClass extends AppCompatDialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        AlertDialog.Builder inputTextDialog = new AlertDialog.Builder(getActivity());
-        inputTextDialog.setTitle("Title");
+        AlertDialog.Builder inputTextDialog  = new AlertDialog.Builder(getActivity());
+        inputTextDialog.setTitle("Enter new group name:");
 
         final EditText input = new EditText(getActivity());
-
-        input.setInputType(InputType.TYPE_CLASS_TEXT );
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
         inputTextDialog.setView(input);
+
+
+        inputTextDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
 
         inputTextDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 text = input.getText().toString();
-            }
-        });
-        inputTextDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
             }
         });
 

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.myapplication.comunnication.Communication;
 import com.myapplication.comunnication.CreateJSONsWithData;
+import com.myapplication.dialog.AlertDialogClass;
 import com.myapplication.models.User;
 import com.myapplication.R;
 import com.myapplication.constants.SessionConstants;
@@ -63,19 +64,21 @@ public class AddUserToGroupAdapter extends RecyclerView.Adapter<AddUserToGroupAd
                 @SneakyThrows
                 @Override
                 public void onClick(View v) {
-
+                    
                     TextView textView = (TextView) v;
                     Communication communication = new Communication();
                     String result = communication.SendAndReceiveMessage(CreateJSONsWithData.AddUserToGroup(getIdOfUserFromName(textView.getText().toString()), SessionConstants.CURRENT_GROUP_ID));
                     JSONObject jsonResult = new JSONObject(result);
 
-                    if (jsonResult.getBoolean("result")) {
+                    /*if (jsonResult.getBoolean("result")) {
+                        AlertDialogClass alertDialogClass = new AlertDialogClass("User has been added to the group", "Success");
+                        alertDialogClass.show(SessionConstants.FRAGMENT_MANAGER, "AlertDialogCreator");
 
-                        String yes = "Dodano użytkownika";
                     }
-                    else{
-                        String no = "Nie dodano";
-                    }
+                    else {
+                        AlertDialogClass alertDialogClass = new AlertDialogClass("User was not added to the group", "Failure");
+                        alertDialogClass.show(SessionConstants.FRAGMENT_MANAGER, "AlertDialogCreator");
+                    }*/
                 }
             });
         }

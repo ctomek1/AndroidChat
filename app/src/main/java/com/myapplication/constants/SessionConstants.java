@@ -2,6 +2,8 @@ package com.myapplication.constants;
 
 import android.content.Context;
 
+import androidx.fragment.app.FragmentManager;
+
 public class SessionConstants {
     public static Integer USER_ID;
     public static Integer CURRENT_RECEIVER_ID;

@@ -31,11 +31,9 @@ public class Communication {
             socket = new Socket("192.168.0.15", 2137);
             OutputStream out = socket.getOutputStream();
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            //input = new PrintWriter(in);
             output = new PrintWriter(out);
         } catch (Exception e) {
-          //  Toast toast = Toast.makeText(SessionConstants.CONTEXT, "Connection failed", Toast.LENGTH_LONG);
-           // toast.show();
+            throw e;
         }
     }
 
@@ -45,16 +43,7 @@ public class Communication {
             try {
                 output.write(messageToSend);
                 output.flush();
-              //  output.close();
-                //receivedMessage = "{\"";
-                //char[] buffer = new char[300];
-               // int count = in.read(buffer, 0, 300);
                 receivedMessage = in.readLine();
-
-
-
-
-
             } catch (IOException e) {
                 e.printStackTrace();
             }

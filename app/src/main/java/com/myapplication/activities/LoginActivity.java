@@ -29,6 +29,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.login);
 
         SessionConstants.CONTEXT = getApplicationContext();
+        SessionConstants.FRAGMENT_MANAGER = getSupportFragmentManager();
 
         Button loginButton = findViewById(R.id.loginButton);
         Button registerButton = findViewById(R.id.registerButton);
@@ -39,6 +40,9 @@ public class LoginActivity extends AppCompatActivity {
             @SneakyThrows
             @Override
             public void onClick(View v) {
+
+                SessionConstants.USER_ID = 1;
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
 
                 if (username.getText().toString().isEmpty() || password.getText().toString().isEmpty()) {
                     openAlertDialog(getResources().getString(R.string.notEnteredLoginOrPassword), getResources().getString(R.string.loginError));
@@ -65,7 +69,6 @@ public class LoginActivity extends AppCompatActivity {
 
                     });
                     thread.start();
-                   // thread.stop();
                 }
             }
 
