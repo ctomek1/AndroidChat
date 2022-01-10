@@ -10,8 +10,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.myapplication.activities.ChatActivity;
 import com.myapplication.Group;
 import com.myapplication.R;
+import com.myapplication.constants.SessionConstants;
 
 import java.util.ArrayList;
 
@@ -45,7 +47,7 @@ public class GroupsListAdapter extends RecyclerView.Adapter<GroupsListAdapter.My
         return groupsList.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView groupsListElement;
 
@@ -56,9 +58,22 @@ public class GroupsListAdapter extends RecyclerView.Adapter<GroupsListAdapter.My
             groupsListElement.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int i = 1;
+                    TextView textView = (TextView) v;
+                    SessionConstants.IS_USER_CHAT = false;
+                    SessionConstants.CURRENT_GROUP_ID = getIdOfGroupFromName(textView.getText().toString());
+                    context.startActivity(new Intent(context, ChatActivity.class));
                 }
             });
         }
+    }
+
+    public int getIdOfGroupFromName(String groupname) {
+        int groupId = 0;
+        for (Group group : groupsList) {
+            if (group.getName().equals(groupname)) {
+                groupId = group.getId();
+            }
+        }
+        return groupId;
     }
 }

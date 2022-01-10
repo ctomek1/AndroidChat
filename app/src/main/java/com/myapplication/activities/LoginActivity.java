@@ -8,21 +8,13 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.myapplication.AlertDialogClass;
+import com.myapplication.dialog.AlertDialogClass;
 import com.myapplication.Communication;
 import com.myapplication.R;
 import com.myapplication.Send;
 import com.myapplication.constants.SessionConstants;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
 import lombok.SneakyThrows;
 
@@ -60,9 +52,9 @@ public class LoginActivity extends AppCompatActivity {
                             String result = communication.SendAndReceiveMessage(Send.Login(username.getText().toString(), password.getText().toString()));
                             JSONObject jsonResult = new JSONObject(result);
 
-                            if ((boolean) jsonResult.get("result") == true) {
+                            if (jsonResult.getBoolean("result") == true) {
 
-                                SessionConstants.USER_ID = (int) jsonResult.get("userId");
+                                SessionConstants.USER_ID = jsonResult.getInt("userId");
                                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
                             } else {
                                 openAlertDialog(getResources().getString(R.string.invalidLoginOrPassword), getResources().getString(R.string.loginError));

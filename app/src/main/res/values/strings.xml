@@ -20,4 +20,9 @@
     <string name="passwordsNotTheSame">Passwords are not the same</string>
     <string name="contactsList">Contacts list</string>
     <string name="groupsList">Groups list</string>
+    <string name="typeMessage">Type message</string>
+    <string name="refresh">Refresh</string>
+    <string name="addUser">Add user</string>
+    <string name="selectUser">Select user</string>
+    <string name="createGroup">Create group</string>
 </resources>

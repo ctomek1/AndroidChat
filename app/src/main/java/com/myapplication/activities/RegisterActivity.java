@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.myapplication.AlertDialogClass;
+import com.myapplication.dialog.AlertDialogClass;
 import com.myapplication.Communication;
 import com.myapplication.R;
 import com.myapplication.Send;
@@ -51,7 +51,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 String result = communication.SendAndReceiveMessage(Send.Registration(username.getText().toString(), password.getText().toString()));
                                 JSONObject jsonResult = new JSONObject(result);
 
-                                if ((boolean) jsonResult.get("result") == true) {
+                                if (jsonResult.getBoolean("result") == true) {
                                     openAlertDialog(getResources().getString(R.string.registrationWasSuccessful), getResources().getString(R.string.registrationSuccessful));
                                     startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                                 } else {

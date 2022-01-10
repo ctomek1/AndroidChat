@@ -21,6 +21,8 @@
         </activity>
         <activity android:name=".activities.RegisterActivity"></activity>
         <activity android:name=".activities.MainActivity"></activity>
+        <activity android:name=".activities.ChatActivity"></activity>
+        <activity android:name=".activities.AddUserToGroupActivity"></activity>
     </application>
 
 </manifest>
