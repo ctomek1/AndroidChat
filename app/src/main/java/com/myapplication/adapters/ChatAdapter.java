@@ -9,7 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.myapplication.Message;
+import com.myapplication.models.Message;
 import com.myapplication.R;
 
 import java.util.ArrayList;

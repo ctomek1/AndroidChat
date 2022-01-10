@@ -9,9 +9,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.myapplication.Communication;
-import com.myapplication.Send;
-import com.myapplication.User;
+import com.myapplication.comunnication.Communication;
+import com.myapplication.comunnication.CreateJSONsWithData;
+import com.myapplication.models.User;
 import com.myapplication.R;
 import com.myapplication.constants.SessionConstants;
 
@@ -66,7 +66,7 @@ public class AddUserToGroupAdapter extends RecyclerView.Adapter<AddUserToGroupAd
 
                     TextView textView = (TextView) v;
                     Communication communication = new Communication();
-                    String result = communication.SendAndReceiveMessage(Send.AddUserToGroup(getIdOfUserFromName(textView.getText().toString()), SessionConstants.CURRENT_GROUP_ID));
+                    String result = communication.SendAndReceiveMessage(CreateJSONsWithData.AddUserToGroup(getIdOfUserFromName(textView.getText().toString()), SessionConstants.CURRENT_GROUP_ID));
                     JSONObject jsonResult = new JSONObject(result);
 
                     if (jsonResult.getBoolean("result")) {

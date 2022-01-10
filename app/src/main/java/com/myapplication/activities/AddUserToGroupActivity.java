@@ -5,21 +5,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
-import com.myapplication.Communication;
-import com.myapplication.Group;
-import com.myapplication.Message;
+import com.myapplication.comunnication.Communication;
 import com.myapplication.R;
-import com.myapplication.Send;
-import com.myapplication.User;
+import com.myapplication.comunnication.CreateJSONsWithData;
+import com.myapplication.models.User;
 import com.myapplication.adapters.AddUserToGroupAdapter;
-import com.myapplication.adapters.UsersListAdapter;
-import com.myapplication.adapters.GroupsListAdapter;
-import com.myapplication.constants.SessionConstants;
-import com.myapplication.json_parser.JsonParse;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,8 +24,6 @@ public class AddUserToGroupActivity extends AppCompatActivity {
     ArrayList<User> usersList = new ArrayList<>();
 
     AddUserToGroupAdapter addUserToGroupAdapter;
-
-    Communication communication = new Communication();
 
     public AddUserToGroupActivity() throws IOException {
     }
@@ -51,7 +40,7 @@ public class AddUserToGroupActivity extends AppCompatActivity {
         usersList.add(new User(1, "Użytkownik"));
         usersList.add(new User(2, "Użytkownik2"));
 
-        // getContactsData();
+        getContactsData();
         setUsersListToAdapter();
     }
 
@@ -62,7 +51,10 @@ public class AddUserToGroupActivity extends AppCompatActivity {
             @SneakyThrows
             @Override
             public void run() {
-                String result = communication.SendAndReceiveMessage(Send.GetAllUsers());
+                Communication communication = new Communication();
+                if (communication.getSocket() != null) {
+                    String result = communication.SendAndReceiveMessage(CreateJSONsWithData.GetAllUsers());
+                }
             }
         });
         thread.start();

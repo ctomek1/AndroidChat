@@ -1,4 +1,8 @@
-package com.myapplication;
+package com.myapplication.comunnication;
+
+import android.widget.Toast;
+
+import com.myapplication.constants.SessionConstants;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -14,7 +18,10 @@ public class Communication {
     Socket socket;
     BufferedReader in;
     PrintWriter output;
-    BufferedWriter out;
+
+    public Socket getSocket() {
+        return socket;
+    }
 
     public Communication() throws IOException {
 
@@ -22,10 +29,9 @@ public class Communication {
             socket = new Socket("192.168.0.15", 2137);
             OutputStream out = socket.getOutputStream();
             output = new PrintWriter(out);
-            //this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            //this.out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
         } catch (Exception e) {
-            throw e;
+            Toast toast = Toast.makeText(SessionConstants.CONTEXT, "Connection failed", Toast.LENGTH_LONG);
+            toast.show();
         }
     }
 
@@ -33,7 +39,6 @@ public class Communication {
         String receivedMessage = "";
         if (socket.isConnected()) {
             try {
-
                 output.write(messageToSend);
                 output.flush();
                 receivedMessage = in.readLine();

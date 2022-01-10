@@ -1,4 +1,6 @@
-package com.myapplication;
+package com.myapplication.comunnication;
+
+import com.myapplication.constants.SessionConstants;
 
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
@@ -10,9 +12,7 @@ import org.json.*;
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
 
-public class Send {
-    private final static String AES_KEY = "p3s6v8y/B?E(H+MbQeThWmZq4t7w!z$C";
-    private final static byte[] KEY_IN_BYTES = AES_KEY.getBytes();
+public class CreateJSONsWithData {
 
     public static String Login(String login, String password) throws JSONException, NoSuchAlgorithmException {
 
@@ -82,7 +82,7 @@ public class Send {
         sendPrivateMessageJSON.put("id", 7);
         sendPrivateMessageJSON.put("authorId", authorId);
         sendPrivateMessageJSON.put("receiverId", receiverId);
-        sendPrivateMessageJSON.put("messageContent", new String(Encryptor(cypherMessageContent, KEY_IN_BYTES)));
+        sendPrivateMessageJSON.put("messageContent", new String(Encryptor(cypherMessageContent, SessionConstants.KEY_IN_BYTES)));
         sendPrivateMessageJSON.put("date", date);
 
         return sendPrivateMessageJSON.toString();
@@ -96,7 +96,7 @@ public class Send {
         sendGroupMessageJSON.put("id", 8);
         sendGroupMessageJSON.put("authorId", authorId);
         sendGroupMessageJSON.put("groupId", groupId);
-        sendGroupMessageJSON.put("messageContent",new String(Encryptor(cypherMessageContent, KEY_IN_BYTES)));
+        sendGroupMessageJSON.put("messageContent", new String(Encryptor(cypherMessageContent, SessionConstants.KEY_IN_BYTES)));
         sendGroupMessageJSON.put("dateOfSend", date);
 
         return sendGroupMessageJSON.toString();

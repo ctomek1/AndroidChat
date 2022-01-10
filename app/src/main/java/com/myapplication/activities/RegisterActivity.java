@@ -9,9 +9,9 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.myapplication.dialog.AlertDialogClass;
-import com.myapplication.Communication;
+import com.myapplication.comunnication.Communication;
 import com.myapplication.R;
-import com.myapplication.Send;
+import com.myapplication.comunnication.CreateJSONsWithData;
 
 import org.json.JSONObject;
 
@@ -48,14 +48,17 @@ public class RegisterActivity extends AppCompatActivity {
                             public void run() {
 
                                 Communication communication = new Communication();
-                                String result = communication.SendAndReceiveMessage(Send.Registration(username.getText().toString(), password.getText().toString()));
-                                JSONObject jsonResult = new JSONObject(result);
 
-                                if (jsonResult.getBoolean("result") == true) {
-                                    openAlertDialog(getResources().getString(R.string.registrationWasSuccessful), getResources().getString(R.string.registrationSuccessful));
-                                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                                } else {
-                                    openAlertDialog(getResources().getString(R.string.userAlreadyExist), getResources().getString(R.string.registerError));
+                                if (communication.getSocket() != null) {
+                                    String result = communication.SendAndReceiveMessage(CreateJSONsWithData.Registration(username.getText().toString(), password.getText().toString()));
+                                    JSONObject jsonResult = new JSONObject(result);
+
+                                    if (jsonResult.getBoolean("result") == true) {
+                                        openAlertDialog(getResources().getString(R.string.registrationWasSuccessful), getResources().getString(R.string.registrationSuccessful));
+                                        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                                    } else {
+                                        openAlertDialog(getResources().getString(R.string.userAlreadyExist), getResources().getString(R.string.registerError));
+                                    }
                                 }
                             }
                         });

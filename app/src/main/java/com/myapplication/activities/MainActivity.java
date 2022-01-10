@@ -9,17 +9,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.myapplication.Communication;
-import com.myapplication.Group;
+import com.myapplication.comunnication.Communication;
+import com.myapplication.models.Group;
 import com.myapplication.R;
-import com.myapplication.Send;
-import com.myapplication.User;
+import com.myapplication.comunnication.CreateJSONsWithData;
+import com.myapplication.models.User;
 import com.myapplication.adapters.UsersListAdapter;
 import com.myapplication.adapters.GroupsListAdapter;
 import com.myapplication.constants.SessionConstants;
-import com.myapplication.dialog.AlertDialogClass;
 import com.myapplication.dialog.InputTextDialogClass;
-import com.myapplication.json_parser.JsonParse;
+import com.myapplication.jsonparser.JsonParse;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
     UsersListAdapter usersListAdapter;
     GroupsListAdapter groupsListAdapter;
 
-    Communication communication = new Communication();
 
     private Boolean isCreateGroupButtonVisible = false;
 
@@ -61,14 +59,8 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
-        usersList.add(new User(1, "Użytkownik"));
-        usersList.add(new User(2, "Użytkownik2"));
-        groupsList.add(new Group(1, "Grupa"));
-        groupsList.add(new Group(2, "Grupa2"));
-
-
-        // getContactsData(communication);
-        // getGroupsData(communication);
+        getContactsData();
+        getGroupsData();
 
         setUsersListToAdapter();
 
@@ -113,7 +105,12 @@ public class MainActivity extends AppCompatActivity {
             @SneakyThrows
             @Override
             public void run() {
-                String result = communication.SendAndReceiveMessage(Send.GetAllUsers());
+
+                Communication communication = new Communication();
+                if (communication.getSocket() != null) {
+                    String result = communication.SendAndReceiveMessage(CreateJSONsWithData.GetAllUsers());
+                    JsonParse.toUsersList(result, usersList);
+                }
             }
         });
         thread.start();
@@ -126,8 +123,12 @@ public class MainActivity extends AppCompatActivity {
             @SneakyThrows
             @Override
             public void run() {
-                String result = communication.SendAndReceiveMessage(Send.GetAllGroups(SessionConstants.USER_ID));
-                JsonParse.toUsersGroupsList(result, groupsList);
+
+                Communication communication = new Communication();
+                if (communication.getSocket() != null) {
+                    String result = communication.SendAndReceiveMessage(CreateJSONsWithData.GetAllGroups(SessionConstants.USER_ID));
+                    JsonParse.toGroupsList(result, groupsList);
+                }
             }
         });
         thread.start();

@@ -8,23 +8,17 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.myapplication.Communication;
-import com.myapplication.Message;
-import com.myapplication.MessageReceiver;
-import com.myapplication.MessageSender;
+import com.myapplication.comunnication.Communication;
+import com.myapplication.models.Message;
 import com.myapplication.R;
-import com.myapplication.Send;
-import com.myapplication.adapters.AddUserToGroupAdapter;
+import com.myapplication.comunnication.CreateJSONsWithData;
 import com.myapplication.adapters.ChatAdapter;
 import com.myapplication.constants.SessionConstants;
-import com.myapplication.json_parser.JsonParse;
+import com.myapplication.jsonparser.JsonParse;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 
 import lombok.SneakyThrows;
 
@@ -35,31 +29,49 @@ public class ChatActivity extends AppCompatActivity {
     ChatAdapter chatAdapter;
     Button sendButton;
     Button refreshButton;
-    MessageSender messageSender;
-    MessageReceiver messageReceiver;
 
     public ChatActivity() {
     }
 
-    @SneakyThrows
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Communication communication = new Communication();
 
         ArrayList<Message> messagesList = new ArrayList<>();
 
         if (SessionConstants.IS_USER_CHAT) {
             setContentView(R.layout.users_chat);
-            String privateMessages = communication.SendAndReceiveMessage(Send.GetAllPrivateMessages(SessionConstants.CURRENT_RECEIVER_ID, SessionConstants.USER_ID));
-            JsonParse.toPrivateMessageList(privateMessages, messagesList);
+
+            Thread thread = new Thread(new Runnable() {
+                @SneakyThrows
+                @Override
+                public void run() {
+                    Communication communication = new Communication();
+                    if (communication.getSocket() != null) {
+                        String privateMessages = communication.SendAndReceiveMessage(CreateJSONsWithData.GetAllPrivateMessages(SessionConstants.CURRENT_RECEIVER_ID, SessionConstants.USER_ID));
+                        JsonParse.toPrivateMessageList(privateMessages, messagesList);
+                    }
+                }
+            });
+            thread.start();
 
         } else {
             setContentView(R.layout.group_chat);
             setAddUserButton();
-            String groupMessages = communication.SendAndReceiveMessage(Send.GetAllGroupMessages(SessionConstants.CURRENT_GROUP_ID));
-            JsonParse.toPrivateMessageList(groupMessages, messagesList);
+
+            Thread thread = new Thread(new Runnable() {
+                @SneakyThrows
+                @Override
+                public void run() {
+                    Communication communication = new Communication();
+                    if (communication.getSocket() != null) {
+                        String groupMessages = communication.SendAndReceiveMessage(CreateJSONsWithData.GetAllGroupMessages(SessionConstants.CURRENT_GROUP_ID));
+                        JsonParse.toPrivateMessageList(groupMessages, messagesList);
+                    }
+                }
+            });
+            thread.start();
         }
 
         chatRecyclerView = findViewById(R.id.chatRecyclerView);
@@ -70,44 +82,64 @@ public class ChatActivity extends AppCompatActivity {
 
         sendButton.setOnClickListener(
                 v -> {
-                    Boolean isMessageHasBeenSend = false;
-                    String result = communication.SendAndReceiveMessage(messageSender.SendMessage());
-                    JSONObject jsonResult = new JSONObject(result);
-                    isMessageHasBeenSend = jsonResult.getBoolean("result") == true;
+                    Message message = new Message();
+                    message.setMessage(messageBox.getText().toString());
+                    message.setAuthorId(SessionConstants.USER_ID);
+                    message.setReceiverId(SessionConstants.CURRENT_RECEIVER_ID);
+                    //     message.setDate(java.time.LocalDate.Now());
 
-                    if (isMessageHasBeenSend) {
-                        Message message = new Message();
-                        message.setMessage(messageBox.getText().toString());
-                        message.setAuthorId(SessionConstants.USER_ID);
-                        message.setReceiverId(SessionConstants.CURRENT_RECEIVER_ID);
-                        //     message.setDate(java.time.LocalDate.Now());
+                    Thread thread = new Thread(new Runnable() {
+                        @SneakyThrows
+                        @Override
+                        public void run() {
+                            Communication communication = new Communication();
+                            if (communication.getSocket() != null) {
+                                String result = communication.SendAndReceiveMessage(CreateJSONsWithData.SendPrivateMessage(SessionConstants.USER_ID, message.getMessage(), message.getReceiverId(), message.getDate()));
+                                JSONObject jsonResult = new JSONObject(result);
+                                Boolean isMessageHasBeenSend = jsonResult.getBoolean("result") == true;
 
-                        ArrayList<Message> newMessages = new ArrayList<>();
-                        newMessages.add(message);
+                                if (isMessageHasBeenSend) {
+                                    ArrayList<Message> newMessages = new ArrayList<>();
+                                    newMessages.add(message);
 
-                        messageSender = new MessageSender(message);
-                        messageReceiver = new MessageReceiver();
-
-                        chatAdapter = new ChatAdapter(this, newMessages);
-                    }
+                                    chatAdapter = new ChatAdapter(SessionConstants.CONTEXT, newMessages);
+                                }
+                            }
+                        }
+                    });
+                    thread.start();
                 });
 
         refreshButton.setOnClickListener(
                 v -> {
                     ArrayList<Message> newMessage = new ArrayList<>();
 
-                    if (SessionConstants.IS_USER_CHAT) {
-                        String result = communication.SendAndReceiveMessage(Send.GetRecentPrivateMessage(SessionConstants.CURRENT_RECEIVER_ID, SessionConstants.USER_ID));
-                        JSONObject jsonResult = new JSONObject(result);
-                        newMessage.add(getPrivateMessage(jsonResult));
+                    Thread thread = new Thread(new Runnable() {
+                        @SneakyThrows
+                        @Override
+                        public void run() {
+                            Communication communication = new Communication();
+                            if (communication.getSocket() != null) {
+                                if (SessionConstants.IS_USER_CHAT) {
 
-                    } else {
-                        String result = communication.SendAndReceiveMessage(Send.GetRecentGroupMessage(SessionConstants.CURRENT_GROUP_ID));
-                        JSONObject jsonResult = new JSONObject(result);
-                        newMessage.add(getGroupMessage(jsonResult));
-                    }
+                                    String result = communication.SendAndReceiveMessage(CreateJSONsWithData.GetRecentPrivateMessage(SessionConstants.CURRENT_RECEIVER_ID, SessionConstants.USER_ID));
+                                    Message message = new Message();
+                                    JsonParse.toRecentPrivateMessage(result, message);
+                                    newMessage.add(message);
 
-                    chatAdapter = new ChatAdapter(this, newMessage);
+                                } else {
+
+                                    String result = communication.SendAndReceiveMessage(CreateJSONsWithData.GetRecentGroupMessage(SessionConstants.CURRENT_GROUP_ID));
+                                    Message message = new Message();
+                                    JsonParse.toRecentGroupMessage(result, message);
+                                    newMessage.add(message);
+                                }
+
+                                chatAdapter = new ChatAdapter(SessionConstants.CONTEXT, newMessage);
+                            }
+                        }
+                    });
+                    thread.start();
                 });
 
     }
@@ -121,27 +153,4 @@ public class ChatActivity extends AppCompatActivity {
                 });
     }
 
-    private Message getGroupMessage(JSONObject jsonResult) throws JSONException {
-
-        Message message = new Message();
-
-        message.setAuthorId(jsonResult.getInt("groupId"));
-        message.setMessage(jsonResult.getString("message"));
-        message.setDate((Date) jsonResult.get("date"));
-        message.setReceiverId(SessionConstants.USER_ID);
-
-        return message;
-    }
-
-    private Message getPrivateMessage(JSONObject jsonResult) throws JSONException {
-
-        Message message = new Message();
-
-        message.setAuthorId(jsonResult.getInt("receiverId"));
-        message.setMessage(jsonResult.getString("message"));
-        message.setDate((Date) jsonResult.get("date"));
-        message.setReceiverId(SessionConstants.USER_ID);
-
-        return message;
-    }
 }

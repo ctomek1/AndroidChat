@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.myapplication.activities.ChatActivity;
-import com.myapplication.Group;
+import com.myapplication.models.Group;
 import com.myapplication.R;
 import com.myapplication.constants.SessionConstants;
 

@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.myapplication.activities.ChatActivity;
 import com.myapplication.R;
-import com.myapplication.User;
+import com.myapplication.models.User;
 import com.myapplication.constants.SessionConstants;
 
 import java.util.ArrayList;

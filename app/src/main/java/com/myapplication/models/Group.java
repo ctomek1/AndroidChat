@@ -1,4 +1,4 @@
-package com.myapplication;
+package com.myapplication.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class User {
+public class Group {
     private int Id;
-    @ToString.Exclude private String name;
+    @ToString.Exclude private String Name;
 }

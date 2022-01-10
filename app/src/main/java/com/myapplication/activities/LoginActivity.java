@@ -9,9 +9,9 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.myapplication.dialog.AlertDialogClass;
-import com.myapplication.Communication;
+import com.myapplication.comunnication.Communication;
 import com.myapplication.R;
-import com.myapplication.Send;
+import com.myapplication.comunnication.CreateJSONsWithData;
 import com.myapplication.constants.SessionConstants;
 
 import org.json.JSONObject;
@@ -28,17 +28,17 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
+        SessionConstants.CONTEXT = getApplicationContext();
+
         Button loginButton = findViewById(R.id.loginButton);
         Button registerButton = findViewById(R.id.registerButton);
         TextView username = findViewById(R.id.username);
         TextView password = findViewById(R.id.password);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
+            @SneakyThrows
             @Override
             public void onClick(View v) {
-
-                SessionConstants.USER_ID = 1;
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
 
                 if (username.getText().toString().isEmpty() || password.getText().toString().isEmpty()) {
                     openAlertDialog(getResources().getString(R.string.notEnteredLoginOrPassword), getResources().getString(R.string.loginError));
@@ -49,15 +49,17 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             Communication communication = new Communication();
-                            String result = communication.SendAndReceiveMessage(Send.Login(username.getText().toString(), password.getText().toString()));
-                            JSONObject jsonResult = new JSONObject(result);
+                            if (communication.getSocket() != null) {
+                                String result = communication.SendAndReceiveMessage(CreateJSONsWithData.Login(username.getText().toString(), password.getText().toString()));
+                                JSONObject jsonResult = new JSONObject(result);
 
-                            if (jsonResult.getBoolean("result") == true) {
+                                if (jsonResult.getBoolean("result") == true) {
 
-                                SessionConstants.USER_ID = jsonResult.getInt("userId");
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                            } else {
-                                openAlertDialog(getResources().getString(R.string.invalidLoginOrPassword), getResources().getString(R.string.loginError));
+                                    SessionConstants.USER_ID = jsonResult.getInt("userId");
+                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                } else {
+                                    openAlertDialog(getResources().getString(R.string.invalidLoginOrPassword), getResources().getString(R.string.loginError));
+                                }
                             }
                         }
 
