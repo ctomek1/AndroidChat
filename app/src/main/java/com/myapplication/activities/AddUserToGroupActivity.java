@@ -43,7 +43,7 @@ public class AddUserToGroupActivity extends AppCompatActivity {
         getContactsData();
         setUsersListToAdapter();
     }
-
+    //TODO Do wywalenia. korzystać z constants
     private void getContactsData() {
 
         Thread thread = new Thread(new Runnable() {

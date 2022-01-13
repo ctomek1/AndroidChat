@@ -33,7 +33,7 @@ public class Communication {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             output = new PrintWriter(out);
         } catch (Exception e) {
-            throw e;
+            throw e; // TODO Error handle
         }
     }
 

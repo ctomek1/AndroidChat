@@ -13,7 +13,7 @@ import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
 
 public class CreateJSONsWithData {
-
+    //TODO Sprawdzić zgodnośc z serwerem
     public static String Login(String login, String password) throws JSONException, NoSuchAlgorithmException {
 
         byte[] bytesPassword = password.getBytes();

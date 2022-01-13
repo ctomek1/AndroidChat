@@ -41,6 +41,7 @@ public class RegisterActivity extends AppCompatActivity {
                 } else {
 
                     if (password.getText().toString().equals(confirmPassword.getText().toString())) {
+
                         Thread thread = new Thread(new Runnable() {
 
                             @SneakyThrows

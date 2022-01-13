@@ -15,6 +15,7 @@ import com.myapplication.R;
 
 import java.util.ArrayList;
 
+//TODO Trzeba mi wypisywanie wiadomości zrobić
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessagesViewHolder> {
 
     Context context;

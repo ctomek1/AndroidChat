@@ -25,4 +25,9 @@
     <string name="addUser">Add user</string>
     <string name="selectUser">Select user</string>
     <string name="createGroup">Create group</string>
+    <string name="success">Success</string>
+    <string name="groupName">Group name</string>
+    <string name="failure">Failure</string>
+    <string name="groupCreateSuccess">Group has been created</string>
+    <string name="groupCreateFailure">Group was not created</string>
 </resources>

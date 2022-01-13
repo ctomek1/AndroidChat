@@ -23,6 +23,7 @@ import java.util.ArrayList;
 
 import lombok.SneakyThrows;
 
+//TODO Tu prace na samym końcu
 public class ChatActivity extends AppCompatActivity {
 
     RecyclerView chatRecyclerView;
@@ -32,6 +33,7 @@ public class ChatActivity extends AppCompatActivity {
     Button refreshButton;
     TextView nameChat;
 
+    //TODO Nie wiem czemu nie dziala ale sie dowiem
     public ChatActivity() {
     }
 
@@ -83,11 +85,9 @@ public class ChatActivity extends AppCompatActivity {
             });
             thread.start();
         }
-
+        // TODO To jest beznadziejne. Napraw
         sendButton.setOnClickListener(
                 v -> {
-
-
                     Thread thread = new Thread(new Runnable() {
                         @SneakyThrows
                         @Override
@@ -120,7 +120,7 @@ public class ChatActivity extends AppCompatActivity {
                                     message.setMessage(messageBox.getText().toString());
                                     message.setAuthorId(SessionConstants.USER_ID);
                                     message.setReceiverId(SessionConstants.CURRENT_GROUP_ID);
-                                    //     message.setDate(java.time.LocalDate.Now());
+                                    //     message.setDate(java.time.LocalDate.Now()); //TODO Ustaw date
 
                                     String result = communication.SendAndReceiveMessage(CreateJSONsWithData.SendGroupMessage(SessionConstants.USER_ID, message.getMessage(), message.getReceiverId(), message.getDate()));
                                     JSONObject jsonResult = new JSONObject(result);
@@ -140,7 +140,7 @@ public class ChatActivity extends AppCompatActivity {
                     });
                     thread.start();
                 });
-
+        //TODO Dopracuj zapytanie
         refreshButton.setOnClickListener(
                 v -> {
                     ArrayList<Message> newMessage = new ArrayList<>();

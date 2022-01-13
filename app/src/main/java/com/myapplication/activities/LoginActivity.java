@@ -19,7 +19,8 @@ import org.json.JSONObject;
 import lombok.SneakyThrows;
 
 public class LoginActivity extends AppCompatActivity {
-
+    // TODO zmien na private
+    // TODO Pozamykaj wątki
     public LoginActivity() {
     }
 
@@ -28,8 +29,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
-        SessionConstants.CONTEXT = getApplicationContext();
-        SessionConstants.FRAGMENT_MANAGER = getSupportFragmentManager();
+        SessionConstants.CONTEXT = getApplicationContext(); // TODO Usuń to
 
         Button loginButton = findViewById(R.id.loginButton);
         Button registerButton = findViewById(R.id.registerButton);
@@ -41,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                SessionConstants.USER_ID = 1;
+                SessionConstants.USER_ID = 1; // TODO Usuń to też
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
 
                 if (username.getText().toString().isEmpty() || password.getText().toString().isEmpty()) {

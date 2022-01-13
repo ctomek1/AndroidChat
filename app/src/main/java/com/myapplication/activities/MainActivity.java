@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -36,9 +37,6 @@ public class MainActivity extends AppCompatActivity {
     Button createGroupButton;
     TextView listName;
 
-    ArrayList<User> usersList = new ArrayList<>();
-    ArrayList<Group> groupsList = new ArrayList<>();
-
     UsersListAdapter usersListAdapter;
     GroupsListAdapter groupsListAdapter;
 
@@ -59,11 +57,12 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
-        usersList.add(new User(2, "User1"));
-        usersList.add(new User(3, "User2"));
+        // TODO Usuń to
+        SessionConstants.LIST_OF_USERS.add(new User(2, "User1"));
+        SessionConstants.LIST_OF_USERS.add(new User(3, "User2"));
 
-        groupsList.add(new Group(1, "Group1"));
-        groupsList.add(new Group(2, "Group2"));
+        SessionConstants.LIST_OF_GROUPS.add(new Group(1, "Group1"));
+        SessionConstants.LIST_OF_GROUPS.add(new Group(2, "Group2"));
 
         getContactsData();
         getGroupsData();
@@ -91,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                getTextFromInputTextDialog(); // TODO czekanie na wynik
                 Thread thread = new Thread(new Runnable() {
 
                     @SneakyThrows
@@ -99,40 +99,28 @@ public class MainActivity extends AppCompatActivity {
 
                         Communication communication = new Communication();
                         if (communication.getSocket().isConnected()) {
-                            String result = communication.SendAndReceiveMessage(CreateJSONsWithData.CreateGroup(getTextFromInputTextDialog()));
+                            String result = communication.SendAndReceiveMessage(CreateJSONsWithData.CreateGroup("aaa"));
 
 
                             JSONObject jsonResult = new JSONObject(result);
                             if (jsonResult.getBoolean("result")) {
 
-                                AlertDialogClass alertDialogClass = new AlertDialogClass("Group has been created", "Success");
-                                alertDialogClass.show(getSupportFragmentManager(), "AlertDialogCreator");
-
                                 result = communication.SendAndReceiveMessage(CreateJSONsWithData.AddUserToGroup(SessionConstants.USER_ID, jsonResult.getInt("groupId")));
                                 jsonResult = new JSONObject(result);
                                 if (jsonResult.getBoolean("result")) {
 
+                                    openAlertDialog(getResources().getString(R.string.groupCreateSuccess), getResources().getString(R.string.success));
                                 }
                             }
                             else {
-                                AlertDialogClass alertDialogClass = new AlertDialogClass("Group was not created", "Failure");
-                                alertDialogClass.show(getSupportFragmentManager(), "AlertDialogCreator");
+                                openAlertDialog(getResources().getString(R.string.groupCreateFailure), getResources().getString(R.string.failure));
                             }
                         }
                     }
                 });
                 thread.start();
-                getTextFromInputTextDialog();
             }
         });
-    }
-
-    private String getTextFromInputTextDialog() {
-
-        InputTextDialogClass inputTextDialogClass = new InputTextDialogClass();
-        inputTextDialogClass.show(getSupportFragmentManager(), "InputTextDialogCreator");
-
-        return inputTextDialogClass.getText();
     }
 
     private void getContactsData() {
@@ -146,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
                 Communication communication = new Communication();
                 if (communication.getSocket().isConnected()) {
                     String result = communication.SendAndReceiveMessage(CreateJSONsWithData.GetAllUsers());
-                    JsonParse.toUsersList(result, usersList);
+                    JsonParse.toUsersList(result, SessionConstants.LIST_OF_USERS);
                 }
             }
         });
@@ -165,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
                 if (communication.getSocket() != null) {
                     String result = communication.SendAndReceiveMessage(CreateJSONsWithData.GetAllGroups(SessionConstants.USER_ID));
                     if (result != null) {
-                        JsonParse.toGroupsList(result, groupsList);
+                        JsonParse.toGroupsList(result, SessionConstants.LIST_OF_GROUPS);
 
                     }
                 }
@@ -176,13 +164,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void setUsersListToAdapter() {
         listName.setText(getResources().getString(R.string.contactsList));
-        usersListAdapter = new UsersListAdapter(this, usersList);
+        usersListAdapter = new UsersListAdapter(this, SessionConstants.LIST_OF_USERS);
         recyclerView.setAdapter(usersListAdapter);
     }
 
     public void setGroupsListToAdapter() {
         listName.setText(getResources().getString(R.string.groupsList));
-        groupsListAdapter = new GroupsListAdapter(this, groupsList);
+        groupsListAdapter = new GroupsListAdapter(this, SessionConstants.LIST_OF_GROUPS);
         recyclerView.setAdapter(groupsListAdapter);
     }
 
@@ -190,5 +178,11 @@ public class MainActivity extends AppCompatActivity {
 
         AlertDialogClass alertDialogClass = new AlertDialogClass(message, title);
         alertDialogClass.show(getSupportFragmentManager(), "AlertDialogCreator");
+    }
+
+    private void getTextFromInputTextDialog() {
+
+        InputTextDialogClass inputTextDialogClass = new InputTextDialogClass();
+        inputTextDialogClass.show(getSupportFragmentManager(), "InputTextDialogCreator");
     }
 }

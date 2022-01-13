@@ -60,6 +60,7 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.MyVi
                 public void onClick(View v) {
 
                     TextView textView = (TextView) v;
+                    //TODO to trzeba coś zmienić v1
                     SessionConstants.IS_USER_CHAT = true;
                     SessionConstants.CURRENT_RECEIVER_ID = getIdOfUserFromName(textView.getText().toString());
                     SessionConstants.CURRENT_RECEIVER_NAME = textView.getText().toString();

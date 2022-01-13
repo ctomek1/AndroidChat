@@ -59,6 +59,7 @@ public class GroupsListAdapter extends RecyclerView.Adapter<GroupsListAdapter.My
                 @Override
                 public void onClick(View v) {
                     TextView textView = (TextView) v;
+                    //TODO to trzeba coś zmienić v2
                     SessionConstants.IS_USER_CHAT = false;
                     SessionConstants.CURRENT_GROUP_ID = getIdOfGroupFromName(textView.getText().toString());
                     SessionConstants.CURRENT_GROUP_NAME = textView.getText().toString();

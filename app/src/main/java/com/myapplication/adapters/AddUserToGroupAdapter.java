@@ -64,12 +64,12 @@ public class AddUserToGroupAdapter extends RecyclerView.Adapter<AddUserToGroupAd
                 @SneakyThrows
                 @Override
                 public void onClick(View v) {
-                    
+
                     TextView textView = (TextView) v;
                     Communication communication = new Communication();
                     String result = communication.SendAndReceiveMessage(CreateJSONsWithData.AddUserToGroup(getIdOfUserFromName(textView.getText().toString()), SessionConstants.CURRENT_GROUP_ID));
                     JSONObject jsonResult = new JSONObject(result);
-
+                    //TODO Ogarnij jak te alerty wypisać
                     /*if (jsonResult.getBoolean("result")) {
                         AlertDialogClass alertDialogClass = new AlertDialogClass("User has been added to the group", "Success");
                         alertDialogClass.show(SessionConstants.FRAGMENT_MANAGER, "AlertDialogCreator");
