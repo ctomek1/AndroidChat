@@ -5,6 +5,7 @@ import com.myapplication.constants.SessionConstants;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.json.*;
@@ -77,13 +78,14 @@ public class CreateJSONsWithData {
     public static String SendPrivateMessage(int authorId, String messageContent, int receiverId, Date date) throws JSONException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
 
         byte[] cypherMessageContent = messageContent.getBytes();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM.dd.yyyy HH:mm:ss");
 
         JSONObject sendPrivateMessageJSON = new JSONObject();
         sendPrivateMessageJSON.put("id", 7);
         sendPrivateMessageJSON.put("authorId", authorId);
         sendPrivateMessageJSON.put("receiverId", receiverId);
         sendPrivateMessageJSON.put("messageContent", new String(Encryptor(cypherMessageContent, SessionConstants.KEY_IN_BYTES)));
-        sendPrivateMessageJSON.put("date", date);
+        sendPrivateMessageJSON.put("date", dateFormat.format(date));
 
         return sendPrivateMessageJSON.toString();
     }
@@ -91,13 +93,14 @@ public class CreateJSONsWithData {
     public static String SendGroupMessage(int authorId, String messageContent, int groupId, Date date) throws JSONException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
 
         byte[] cypherMessageContent = messageContent.getBytes();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM.dd.yyyy HH:mm:ss");
 
         JSONObject sendGroupMessageJSON = new JSONObject();
         sendGroupMessageJSON.put("id", 8);
         sendGroupMessageJSON.put("authorId", authorId);
         sendGroupMessageJSON.put("groupId", groupId);
         sendGroupMessageJSON.put("messageContent", new String(Encryptor(cypherMessageContent, SessionConstants.KEY_IN_BYTES)));
-        sendGroupMessageJSON.put("dateOfSend", date);
+        sendGroupMessageJSON.put("dateOfSend", dateFormat.format(date));
 
         return sendGroupMessageJSON.toString();
     }

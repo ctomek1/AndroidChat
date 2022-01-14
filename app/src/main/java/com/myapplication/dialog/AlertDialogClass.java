@@ -7,6 +7,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
+import com.myapplication.R;
+
 public class AlertDialogClass extends AppCompatDialogFragment {
 
     private String message;
@@ -23,7 +25,7 @@ public class AlertDialogClass extends AppCompatDialogFragment {
         AlertDialog.Builder alertDialog  = new AlertDialog.Builder(getActivity());
         alertDialog.setMessage(message);
         alertDialog.setTitle(title);
-        alertDialog.setPositiveButton("Ok", null);
+        alertDialog.setPositiveButton(getResources().getString(R.string.ok), null);
 
         return alertDialog.create();
     }

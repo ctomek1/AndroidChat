@@ -30,4 +30,10 @@
     <string name="failure">Failure</string>
     <string name="groupCreateSuccess">Group has been created</string>
     <string name="groupCreateFailure">Group was not created</string>
+    <string name="addUserToGroupSuccess">User has been added to the group</string>
+    <string name="addUserToGroupFailure">User was not added to the group</string>
+    <string name="connectionFailed">Connection Failed</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="enterNewGroupName">Enter new group name</string>
 </resources>

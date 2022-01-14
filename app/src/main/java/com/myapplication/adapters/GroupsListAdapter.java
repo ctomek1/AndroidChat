@@ -19,8 +19,8 @@ import java.util.ArrayList;
 
 public class GroupsListAdapter extends RecyclerView.Adapter<GroupsListAdapter.MyViewHolder> {
 
-    Context context;
-    ArrayList<Group> groupsList;
+    private Context context;
+    private ArrayList<Group> groupsList;
 
     public GroupsListAdapter(Context context, ArrayList<Group> groupsList) {
         this.context = context;
@@ -59,7 +59,6 @@ public class GroupsListAdapter extends RecyclerView.Adapter<GroupsListAdapter.My
                 @Override
                 public void onClick(View v) {
                     TextView textView = (TextView) v;
-                    //TODO to trzeba coś zmienić v2
                     SessionConstants.IS_USER_CHAT = false;
                     SessionConstants.CURRENT_GROUP_ID = getIdOfGroupFromName(textView.getText().toString());
                     SessionConstants.CURRENT_GROUP_NAME = textView.getText().toString();

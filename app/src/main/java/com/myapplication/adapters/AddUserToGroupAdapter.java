@@ -5,8 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.myapplication.comunnication.Communication;
@@ -65,20 +67,31 @@ public class AddUserToGroupAdapter extends RecyclerView.Adapter<AddUserToGroupAd
                 @Override
                 public void onClick(View v) {
 
-                    TextView textView = (TextView) v;
-                    Communication communication = new Communication();
-                    String result = communication.SendAndReceiveMessage(CreateJSONsWithData.AddUserToGroup(getIdOfUserFromName(textView.getText().toString()), SessionConstants.CURRENT_GROUP_ID));
-                    JSONObject jsonResult = new JSONObject(result);
-                    //TODO Ogarnij jak te alerty wypisać
-                    /*if (jsonResult.getBoolean("result")) {
-                        AlertDialogClass alertDialogClass = new AlertDialogClass("User has been added to the group", "Success");
-                        alertDialogClass.show(SessionConstants.FRAGMENT_MANAGER, "AlertDialogCreator");
+                    Thread thread = new Thread(new Runnable() {
 
-                    }
-                    else {
-                        AlertDialogClass alertDialogClass = new AlertDialogClass("User was not added to the group", "Failure");
-                        alertDialogClass.show(SessionConstants.FRAGMENT_MANAGER, "AlertDialogCreator");
-                    }*/
+                        @SneakyThrows
+                        @Override
+                        public void run() {
+                            TextView textView = (TextView) v;
+                            Communication communication = new Communication();
+                            if (communication.getSocket().isConnected()) {
+                                String result = communication.SendAndReceiveMessage(CreateJSONsWithData.AddUserToGroup(getIdOfUserFromName(textView.getText().toString()), SessionConstants.CURRENT_GROUP_ID));
+                                JSONObject jsonResult = new JSONObject(result);
+
+                                if (jsonResult.getBoolean("result")) {
+                                    openAlertDialog(v.getResources().getString(R.string.addUserToGroupSuccess), v.getResources().getString(R.string.success));
+                                } else {
+                                    openAlertDialog(v.getResources().getString(R.string.addUserToGroupFailure), v.getResources().getString(R.string.failure));
+                                }
+                            }
+                            else {
+                                Toast toast = Toast.makeText(v.getContext(), v.getResources().getString(R.string.connectionFailed), Toast.LENGTH_LONG);
+                                toast.show();
+                            }
+                        }
+
+                    });
+                    thread.start();
                 }
             });
         }
@@ -94,5 +107,9 @@ public class AddUserToGroupAdapter extends RecyclerView.Adapter<AddUserToGroupAd
         return userId;
     }
 
+    private void openAlertDialog(String message, String title) {
 
+        AlertDialogClass alertDialogClass = new AlertDialogClass(message, title);
+        alertDialogClass.show(((AppCompatActivity) context).getSupportFragmentManager(), "AlertDialogCreator");
+    }
 }

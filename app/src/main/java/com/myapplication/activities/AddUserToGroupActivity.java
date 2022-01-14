@@ -9,6 +9,7 @@ import android.os.Bundle;
 import com.myapplication.comunnication.Communication;
 import com.myapplication.R;
 import com.myapplication.comunnication.CreateJSONsWithData;
+import com.myapplication.constants.SessionConstants;
 import com.myapplication.models.User;
 import com.myapplication.adapters.AddUserToGroupAdapter;
 
@@ -19,11 +20,9 @@ import lombok.SneakyThrows;
 
 public class AddUserToGroupActivity extends AppCompatActivity {
 
-    RecyclerView recyclerView;
-
-    ArrayList<User> usersList = new ArrayList<>();
-
-    AddUserToGroupAdapter addUserToGroupAdapter;
+    private RecyclerView recyclerView;
+    private ArrayList<User> usersList = new ArrayList<>();
+    private AddUserToGroupAdapter addUserToGroupAdapter;
 
     public AddUserToGroupActivity() throws IOException {
     }
@@ -37,31 +36,11 @@ public class AddUserToGroupActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
-        usersList.add(new User(2, "User1"));
-        usersList.add(new User(3, "User2"));
-
-        getContactsData();
         setUsersListToAdapter();
     }
-    //TODO Do wywalenia. korzystać z constants
-    private void getContactsData() {
 
-        Thread thread = new Thread(new Runnable() {
-
-            @SneakyThrows
-            @Override
-            public void run() {
-                Communication communication = new Communication();
-                if (communication.getSocket().isConnected()) {
-                    String result = communication.SendAndReceiveMessage(CreateJSONsWithData.GetAllUsers());
-                }
-            }
-        });
-        thread.start();
-    }
-
-    public void setUsersListToAdapter() {
-        addUserToGroupAdapter = new AddUserToGroupAdapter(this, usersList);
+    private void setUsersListToAdapter() {
+        addUserToGroupAdapter = new AddUserToGroupAdapter(this, SessionConstants.LIST_OF_USERS);
         recyclerView.setAdapter(addUserToGroupAdapter);
     }
 

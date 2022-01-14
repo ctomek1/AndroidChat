@@ -1,46 +1,49 @@
 package com.myapplication.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.DialogInterface;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.myapplication.R;
+import com.myapplication.adapters.GroupsListAdapter;
+import com.myapplication.adapters.UsersListAdapter;
 import com.myapplication.comunnication.Communication;
+import com.myapplication.comunnication.CreateJSONsWithData;
+import com.myapplication.constants.SessionConstants;
 import com.myapplication.dialog.AlertDialogClass;
 import com.myapplication.dialog.InputTextDialogClass;
-import com.myapplication.models.Group;
-import com.myapplication.R;
-import com.myapplication.comunnication.CreateJSONsWithData;
-import com.myapplication.models.User;
-import com.myapplication.adapters.UsersListAdapter;
-import com.myapplication.adapters.GroupsListAdapter;
-import com.myapplication.constants.SessionConstants;
 import com.myapplication.jsonparser.JsonParse;
+import com.myapplication.models.Group;
+import com.myapplication.models.User;
 
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import lombok.SneakyThrows;
 
 public class MainActivity extends AppCompatActivity {
 
-    RecyclerView recyclerView;
-    Button contactsButton;
-    Button groupsButton;
-    Button createGroupButton;
-    TextView listName;
+    private RecyclerView recyclerView;
+    private Button contactsButton;
+    private Button groupsButton;
+    private Button createGroupButton;
+    private TextView listName;
 
-    UsersListAdapter usersListAdapter;
-    GroupsListAdapter groupsListAdapter;
+    private UsersListAdapter usersListAdapter;
+    private GroupsListAdapter groupsListAdapter;
 
-    public MainActivity() throws IOException {
+    private Context context;
+
+    public MainActivity() {
+        this.context = this;
     }
 
     @SneakyThrows
@@ -116,6 +119,10 @@ public class MainActivity extends AppCompatActivity {
                                 openAlertDialog(getResources().getString(R.string.groupCreateFailure), getResources().getString(R.string.failure));
                             }
                         }
+                        else {
+                            Toast toast = Toast.makeText(v.getContext(), getResources().getString(R.string.connectionFailed), Toast.LENGTH_LONG);
+                            toast.show();
+                        }
                     }
                 });
                 thread.start();
@@ -136,6 +143,10 @@ public class MainActivity extends AppCompatActivity {
                     String result = communication.SendAndReceiveMessage(CreateJSONsWithData.GetAllUsers());
                     JsonParse.toUsersList(result, SessionConstants.LIST_OF_USERS);
                 }
+                else {
+                    Toast toast = Toast.makeText(context, getResources().getString(R.string.connectionFailed), Toast.LENGTH_LONG);
+                    toast.show();
+                }
             }
         });
         thread.start();
@@ -150,25 +161,29 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
 
                 Communication communication = new Communication();
-                if (communication.getSocket() != null) {
+                if (communication.getSocket().isConnected()) {
                     String result = communication.SendAndReceiveMessage(CreateJSONsWithData.GetAllGroups(SessionConstants.USER_ID));
                     if (result != null) {
                         JsonParse.toGroupsList(result, SessionConstants.LIST_OF_GROUPS);
 
                     }
                 }
+                else {
+                    Toast toast = Toast.makeText(context, getResources().getString(R.string.connectionFailed), Toast.LENGTH_LONG);
+                    toast.show();
+                }
             }
         });
         thread.start();
     }
 
-    public void setUsersListToAdapter() {
+    private void setUsersListToAdapter() {
         listName.setText(getResources().getString(R.string.contactsList));
         usersListAdapter = new UsersListAdapter(this, SessionConstants.LIST_OF_USERS);
         recyclerView.setAdapter(usersListAdapter);
     }
 
-    public void setGroupsListToAdapter() {
+    private void setGroupsListToAdapter() {
         listName.setText(getResources().getString(R.string.groupsList));
         groupsListAdapter = new GroupsListAdapter(this, SessionConstants.LIST_OF_GROUPS);
         recyclerView.setAdapter(groupsListAdapter);

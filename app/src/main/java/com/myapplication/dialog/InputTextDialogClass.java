@@ -9,6 +9,8 @@ import android.widget.EditText;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
+import com.myapplication.R;
+
 public class InputTextDialogClass extends AppCompatDialogFragment {
 
     private String text = "";
@@ -24,21 +26,21 @@ public class InputTextDialogClass extends AppCompatDialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         AlertDialog.Builder inputTextDialog  = new AlertDialog.Builder(getActivity());
-        inputTextDialog.setTitle("Enter new group name:");
+        inputTextDialog.setTitle(getResources().getString(R.string.enterNewGroupName));
 
         final EditText input = new EditText(getActivity());
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         inputTextDialog.setView(input);
 
 
-        inputTextDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        inputTextDialog.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
             }
         });
 
-        inputTextDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        inputTextDialog.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 text = input.getText().toString();

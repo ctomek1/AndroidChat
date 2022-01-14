@@ -12,14 +12,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.myapplication.constants.SessionConstants;
 import com.myapplication.models.Message;
 import com.myapplication.R;
+import com.myapplication.models.User;
 
 import java.util.ArrayList;
 
-//TODO Trzeba mi wypisywanie wiadomości zrobić
-public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessagesViewHolder> {
+public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> {
 
-    Context context;
-    ArrayList<Message> messagesList;
+    private Context context;
+    private ArrayList<Message> messagesList;
 
     public ChatAdapter(Context context, ArrayList<Message> messagesList) {
         this.context = context;
@@ -28,17 +28,19 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessagesViewHo
 
     @NonNull
     @Override
-    public ChatAdapter.MessagesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ChatAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
         View v = LayoutInflater.from(context).inflate(R.layout.message, parent, false);
-        return new MessagesViewHolder(v);
+        return new ChatAdapter.MyViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ChatAdapter.MessagesViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
         Message message = messagesList.get(position);
+
+        holder.author.setText(getAuthorName(message.getAuthorId()));
         holder.message.setText(message.getMessage());
-        holder.author.setText(message.getAuthorName());
     }
 
     @Override
@@ -46,15 +48,31 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessagesViewHo
         return messagesList.size();
     }
 
-    public static class MessagesViewHolder extends RecyclerView.ViewHolder {
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView message;
         TextView author;
 
-        public MessagesViewHolder(@NonNull View itemView) {
+        public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             message = itemView.findViewById(R.id.textMessage);
             author = itemView.findViewById(R.id.authorOfMessage);
         }
+    }
+
+    private String getAuthorName(int authorId) {
+        String authorName = "";
+        if (SessionConstants.USER_ID == authorId) {
+            authorName = "You";
+        }
+        else {
+           for (User user : SessionConstants.LIST_OF_USERS) {
+               if (user.getId() == authorId) {
+                   authorName = user.getName();
+                   break;
+               }
+           }
+        }
+        return authorName;
     }
 }

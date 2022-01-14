@@ -1,10 +1,12 @@
 package com.myapplication.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,17 +21,17 @@ import org.json.JSONObject;
 import lombok.SneakyThrows;
 
 public class LoginActivity extends AppCompatActivity {
-    // TODO zmien na private
+
+    private Context context;
     // TODO Pozamykaj wątki
     public LoginActivity() {
+        this.context = this;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-
-        SessionConstants.CONTEXT = getApplicationContext(); // TODO Usuń to
 
         Button loginButton = findViewById(R.id.loginButton);
         Button registerButton = findViewById(R.id.registerButton);
@@ -42,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 SessionConstants.USER_ID = 1; // TODO Usuń to też
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                startActivity(new Intent(context, MainActivity.class));
 
                 if (username.getText().toString().isEmpty() || password.getText().toString().isEmpty()) {
                     openAlertDialog(getResources().getString(R.string.notEnteredLoginOrPassword), getResources().getString(R.string.loginError));
@@ -53,20 +55,23 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             Communication communication = new Communication();
-                            if (communication.getSocket() != null) {
+                            if (communication.getSocket().isConnected()) {
                                 String result = communication.SendAndReceiveMessage(CreateJSONsWithData.Login(username.getText().toString(), password.getText().toString()));
                                 JSONObject jsonResult = new JSONObject(result);
 
                                 if (jsonResult.getBoolean("result") == true) {
 
                                     SessionConstants.USER_ID = jsonResult.getInt("userId");
-                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                    startActivity(new Intent(context, MainActivity.class));
                                 } else {
                                     openAlertDialog(getResources().getString(R.string.invalidLoginOrPassword), getResources().getString(R.string.loginError));
                                 }
                             }
+                            else {
+                                Toast toast = Toast.makeText(v.getContext(), getResources().getString(R.string.connectionFailed), Toast.LENGTH_LONG);
+                                toast.show();
+                            }
                         }
-
                     });
                     thread.start();
                 }
@@ -78,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
+                startActivity(new Intent(context, RegisterActivity.class));
             }
         });
     }
