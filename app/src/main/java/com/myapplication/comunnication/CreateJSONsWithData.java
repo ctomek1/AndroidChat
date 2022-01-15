@@ -83,7 +83,7 @@ public class CreateJSONsWithData {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             byte[] cypherMessageContent = messageContent.getBytes();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
             JSONObject sendPrivateMessageJSON = new JSONObject();
             sendPrivateMessageJSON.put("id", 7);
@@ -101,7 +101,7 @@ public class CreateJSONsWithData {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             byte[] cypherMessageContent = messageContent.getBytes();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
             JSONObject sendGroupMessageJSON = new JSONObject();
             sendGroupMessageJSON.put("id", 8);
