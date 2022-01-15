@@ -86,39 +86,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String test = getTextFromInputTextDialog(); // TODO czekanie na wynik
-                Thread thread = new Thread(new Runnable() {
-
-                    @SneakyThrows
-                    @Override
-                    public void run() {
-
-                        Communication communication = new Communication();
-                        if (communication.getSocket().isConnected()) {
-                            String result = communication.SendAndReceiveMessage(CreateJSONsWithData.CreateGroup(test));
-
-
-                            JSONObject jsonResult = new JSONObject(result);
-                            if (jsonResult.getBoolean("result")) {
-
-                                result = communication.SendAndReceiveMessage(CreateJSONsWithData.AddUserToGroup(SessionConstants.USER_ID, jsonResult.getInt("groupId")));
-                                jsonResult = new JSONObject(result);
-                                if (jsonResult.getBoolean("result")) {
-
-                                    openAlertDialog(getResources().getString(R.string.groupCreateSuccess), getResources().getString(R.string.success));
-                                }
-                            }
-                            else {
-                                openAlertDialog(getResources().getString(R.string.groupCreateFailure), getResources().getString(R.string.failure));
-                            }
-                        }
-                        else {
-                            Toast toast = Toast.makeText(v.getContext(), getResources().getString(R.string.connectionFailed), Toast.LENGTH_LONG);
-                            toast.show();
-                        }
-                    }
-                });
-                thread.start();
+                getTextFromInputTextDialog();
             }
         });
     }
@@ -158,7 +126,6 @@ public class MainActivity extends AppCompatActivity {
                     String result = communication.SendAndReceiveMessage(CreateJSONsWithData.GetAllGroups(SessionConstants.USER_ID));
                     if (!result.equals("null")) {
                         JsonParse.toGroupsList(result, SessionConstants.LIST_OF_GROUPS);
-
                     }
                 }
                 else {
@@ -182,17 +149,10 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(groupsListAdapter);
     }
 
-    private void openAlertDialog(String message, String title) {
-
-        AlertDialogClass alertDialogClass = new AlertDialogClass(message, title);
-        alertDialogClass.show(getSupportFragmentManager(), "AlertDialogCreator");
-    }
-
-    private String getTextFromInputTextDialog() {
+    private void getTextFromInputTextDialog() {
 
         InputTextDialogClass inputTextDialogClass = new InputTextDialogClass();
         inputTextDialogClass.show(getSupportFragmentManager(), "InputTextDialogCreator");
 
-        return inputTextDialogClass.getText();
     }
 }

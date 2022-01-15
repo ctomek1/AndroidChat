@@ -5,18 +5,27 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.InputType;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.myapplication.R;
+import com.myapplication.comunnication.Communication;
+import com.myapplication.comunnication.CreateJSONsWithData;
+import com.myapplication.constants.SessionConstants;
+
+import org.json.JSONObject;
 
 import java.util.concurrent.TimeUnit;
 
+import lombok.SneakyThrows;
+
 public class InputTextDialogClass extends AppCompatDialogFragment {
 
-    private String text = null;
+    private String text = "";
 
     public InputTextDialogClass() {
     }
@@ -46,7 +55,39 @@ public class InputTextDialogClass extends AppCompatDialogFragment {
         inputTextDialog.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+
                 text = input.getText().toString();
+                if (!text.equals("")) {
+                    Thread thread = new Thread(new Runnable() {
+
+                        @SneakyThrows
+                        @Override
+                        public void run() {
+
+                            Communication communication = new Communication();
+                            if (communication.getSocket().isConnected()) {
+                                String result = communication.SendAndReceiveMessage(CreateJSONsWithData.CreateGroup(text));
+
+                                JSONObject jsonResult = new JSONObject(result);
+                                if (jsonResult.getBoolean("result")) {
+
+                                    result = communication.SendAndReceiveMessage(CreateJSONsWithData.AddUserToGroup(SessionConstants.USER_ID, jsonResult.getInt("groupId")));
+                                    jsonResult = new JSONObject(result);
+                                    if (jsonResult.getBoolean("result")) {
+
+                                        openAlertDialog(getResources().getString(R.string.groupCreateSuccess), getResources().getString(R.string.success));
+                                    }
+                                } else {
+                                    openAlertDialog(getResources().getString(R.string.groupCreateFailure), getResources().getString(R.string.failure));
+                                }
+                            } else {
+                                Toast toast = Toast.makeText(getContext(), getResources().getString(R.string.connectionFailed), Toast.LENGTH_LONG);
+                                toast.show();
+                            }
+                        }
+                    });
+                    thread.start();
+                }
             }
         });
 
@@ -66,5 +107,9 @@ public class InputTextDialogClass extends AppCompatDialogFragment {
 
     }
 
+    private void openAlertDialog(String message, String title) {
 
+        AlertDialogClass alertDialogClass = new AlertDialogClass(message, title);
+        alertDialogClass.show(((AppCompatActivity) getContext()).getSupportFragmentManager(), "AlertDialogCreator");
+    }
 }
