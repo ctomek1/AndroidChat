@@ -70,7 +70,8 @@ public class InputTextDialogClass extends AppCompatDialogFragment {
 
                                 JSONObject jsonResult = new JSONObject(result);
                                 if (jsonResult.getBoolean("result")) {
-
+                                    communication = new Communication();
+                                    if (communication.getSocket().isConnected()) {
                                     result = communication.SendAndReceiveMessage(CreateJSONsWithData.AddUserToGroup(SessionConstants.USER_ID, jsonResult.getInt("groupId")));
                                     jsonResult = new JSONObject(result);
                                     if (jsonResult.getBoolean("result")) {
@@ -79,6 +80,7 @@ public class InputTextDialogClass extends AppCompatDialogFragment {
                                     }
                                 } else {
                                     openAlertDialog(getResources().getString(R.string.groupCreateFailure), getResources().getString(R.string.failure));
+                                }
                                 }
                             } else {
                                 Toast toast = Toast.makeText(getContext(), getResources().getString(R.string.connectionFailed), Toast.LENGTH_LONG);
