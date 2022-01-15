@@ -133,6 +133,11 @@ public class ChatActivity extends AppCompatActivity {
 
                                 if (jsonResult.getBoolean("result")) {
                                     messagesList.add(message);
+                                    setMessagesToAdapter(messagesList);
+                                    chatRecyclerView.scrollToPosition(messagesList.size() - 1);
+                                }
+                                else {
+                                    //TODO informacja o błednym wysłaniu
                                 }
 
                             } else {
@@ -144,10 +149,13 @@ public class ChatActivity extends AppCompatActivity {
 
                                 if (jsonResult.getBoolean("result")) {
                                     messagesList.add(message);
+                                    setMessagesToAdapter(messagesList);
+                                    chatRecyclerView.scrollToPosition(messagesList.size() - 1);
+                                }
+                                else {
+                                    //TODO informacja o błednym wysłaniu
                                 }
                             }
-                            setMessagesToAdapter(messagesList);
-                            chatRecyclerView.scrollToPosition(messagesList.size() - 1);
                         } else {
                             Toast toast = Toast.makeText(v.getContext(), getResources().getString(R.string.connectionFailed), Toast.LENGTH_LONG);
                             toast.show();
