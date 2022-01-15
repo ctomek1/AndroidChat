@@ -9,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -81,36 +82,36 @@ public class JsonParse {
         return true;
     }
 
-    public static boolean toRecentPrivateMessage(String jsonMessage, Message message) throws IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException, JSONException {
+    public static boolean toRecentPrivateMessage(String jsonMessage, Message message) throws IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException, JSONException, UnsupportedEncodingException {
         JSONObject jmessage;
         message = new Message();
         jmessage = new JSONObject(jsonMessage);
 
         message.setDate(new Date(jmessage.getString("date")));
         message.setReceiverId(jmessage.getInt("receiverId"));
-        message.setMessage(new String(Decryptor(jmessage.getString("message").getBytes(), SessionConstants.KEY_IN_BYTES)));
+        message.setMessage(new String(Decryptor(jmessage.getString("message").getBytes("ASCII"), SessionConstants.KEY_IN_BYTES), "ASCII"));
         message.setAuthorId(jmessage.getInt("authorId"));
         return true;
     }
 
-    public static boolean toRecentGroupMessage(String jsonGroupMessage, Message message) throws IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException, JSONException {
+    public static boolean toRecentGroupMessage(String jsonGroupMessage, Message message) throws IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException, JSONException, UnsupportedEncodingException {
         JSONObject jmessage;
         message = new Message();
         jmessage = new JSONObject(jsonGroupMessage);
         message.setAuthorId(jmessage.getInt("authorId"));
         message.setDate(new Date(jmessage.getString("date")));
         message.setReceiverId(jmessage.getInt("groupId"));
-        message.setMessage(new String(Decryptor(jmessage.getString("message").getBytes(), SessionConstants.KEY_IN_BYTES)));
+        message.setMessage(new String(Decryptor(jmessage.getString("message").getBytes("ASCII"), SessionConstants.KEY_IN_BYTES), "ASCII"));
 
         return true;
     }
 
     //TODO Ciekawe czy to dobrze odszyfrowuje
-    public static byte[] Decryptor(byte[] encryptedMessage, byte[] keyBytes) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+    public static byte[] Decryptor(byte[] message, byte[] keyBytes) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
 
         Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
         SecretKey secretKey = new SecretKeySpec(keyBytes, "AES");
         cipher.init(Cipher.DECRYPT_MODE, secretKey);
-        return cipher.doFinal(encryptedMessage);
+        return cipher.doFinal(message);
     }
 }

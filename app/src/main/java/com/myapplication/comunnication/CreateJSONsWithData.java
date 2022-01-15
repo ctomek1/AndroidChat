@@ -2,6 +2,7 @@ package com.myapplication.comunnication;
 
 import com.myapplication.constants.SessionConstants;
 
+import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -75,7 +76,7 @@ public class CreateJSONsWithData {
         return addUserToGroupJSON.toString();
     }
 
-    public static String SendPrivateMessage(int authorId, String messageContent, int receiverId, Date date) throws JSONException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
+    public static String SendPrivateMessage(int authorId, String messageContent, int receiverId, Date date) throws JSONException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException, UnsupportedEncodingException {
 
         byte[] cypherMessageContent = messageContent.getBytes();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -84,13 +85,13 @@ public class CreateJSONsWithData {
         sendPrivateMessageJSON.put("id", 7);
         sendPrivateMessageJSON.put("authorId", authorId);
         sendPrivateMessageJSON.put("receiverId", receiverId);
-        sendPrivateMessageJSON.put("messageContent", new String(Encryptor(cypherMessageContent, SessionConstants.KEY_IN_BYTES)));
+        sendPrivateMessageJSON.put("messageContent", new String(Encryptor(cypherMessageContent, SessionConstants.KEY_IN_BYTES), "ASCII"));
         sendPrivateMessageJSON.put("date", dateFormat.format(date));
 
         return sendPrivateMessageJSON.toString();
     }
 
-    public static String SendGroupMessage(int authorId, String messageContent, int groupId, Date date) throws JSONException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
+    public static String SendGroupMessage(int authorId, String messageContent, int groupId, Date date) throws JSONException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException, UnsupportedEncodingException {
 
         byte[] cypherMessageContent = messageContent.getBytes();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -99,7 +100,7 @@ public class CreateJSONsWithData {
         sendGroupMessageJSON.put("id", 8);
         sendGroupMessageJSON.put("authorId", authorId);
         sendGroupMessageJSON.put("groupId", groupId);
-        sendGroupMessageJSON.put("messageContent", new String(Encryptor(cypherMessageContent, SessionConstants.KEY_IN_BYTES)));
+        sendGroupMessageJSON.put("messageContent", new String(Encryptor(cypherMessageContent, SessionConstants.KEY_IN_BYTES), "ASCII"));
         sendGroupMessageJSON.put("dateOfSend", dateFormat.format(date));
 
         return sendGroupMessageJSON.toString();
