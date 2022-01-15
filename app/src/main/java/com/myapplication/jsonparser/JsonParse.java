@@ -13,6 +13,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
@@ -32,20 +33,22 @@ public class JsonParse {
     public static boolean toMessageList(String jsonMessageArray, List<Message> destinationList) {
         List<Message> msgl = new ArrayList<>();
         JSONArray allMessage, singleMessage;
-        try {
-            allMessage = new JSONArray(jsonMessageArray);
-            for (int i = 0; i < allMessage.length(); i++) {
-                singleMessage = new JSONArray(allMessage.getJSONArray(i).toString());
-                Message msg = new Message();
-                msg.setAuthorId(singleMessage.getJSONArray(0).getInt(1));
-                msg.setMessage(new String(Decryptor(singleMessage.getJSONArray(1).getString(1).getBytes(), SessionConstants.KEY_IN_BYTES)));
-                msg.setDate(new Date(singleMessage.getJSONArray(2).getString(1)));
-                msgl.add(msg);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            try {
+                allMessage = new JSONArray(jsonMessageArray);
+                for (int i = 0; i < allMessage.length(); i++) {
+                    singleMessage = new JSONArray(allMessage.getJSONArray(i).toString());
+                    Message msg = new Message();
+                    msg.setAuthorId(singleMessage.getJSONArray(0).getInt(1));
+                    msg.setMessage(new String(Decryptor(Base64.getDecoder().decode(singleMessage.getJSONArray(1).getString(1)), SessionConstants.KEY_IN_BYTES)));
+                    msg.setDate(new Date(singleMessage.getJSONArray(2).getString(1)));
+                    msgl.add(msg);
+                }
+                destinationList.addAll(msgl);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return false;
             }
-            destinationList.addAll(msgl);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return false;
         }
         return true;
     }
@@ -83,27 +86,34 @@ public class JsonParse {
     }
 
     public static boolean toRecentPrivateMessage(String jsonMessage, Message message) throws IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException, JSONException, UnsupportedEncodingException {
-        JSONObject jmessage;
-        message = new Message();
-        jmessage = new JSONObject(jsonMessage);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            JSONObject jmessage;
+            message = new Message();
+            jmessage = new JSONObject(jsonMessage);
 
-        message.setDate(new Date(jmessage.getString("date")));
-        message.setReceiverId(jmessage.getInt("receiverId"));
-        message.setMessage(new String(Decryptor(jmessage.getString("message").getBytes("ASCII"), SessionConstants.KEY_IN_BYTES), "ASCII"));
-        message.setAuthorId(jmessage.getInt("authorId"));
-        return true;
+            message.setDate(new Date(jmessage.getString("date")));
+            message.setReceiverId(jmessage.getInt("receiverId"));
+            message.setMessage(new String(Decryptor(Base64.getDecoder().decode(jmessage.getString("message")), SessionConstants.KEY_IN_BYTES)));
+            message.setAuthorId(jmessage.getInt("authorId"));
+            return true;
+        }
+        return false;
     }
 
     public static boolean toRecentGroupMessage(String jsonGroupMessage, Message message) throws IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException, JSONException, UnsupportedEncodingException {
-        JSONObject jmessage;
-        message = new Message();
-        jmessage = new JSONObject(jsonGroupMessage);
-        message.setAuthorId(jmessage.getInt("authorId"));
-        message.setDate(new Date(jmessage.getString("date")));
-        message.setReceiverId(jmessage.getInt("groupId"));
-        message.setMessage(new String(Decryptor(jmessage.getString("message").getBytes("ASCII"), SessionConstants.KEY_IN_BYTES), "ASCII"));
 
-        return true;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            JSONObject jmessage;
+            message = new Message();
+            jmessage = new JSONObject(jsonGroupMessage);
+            message.setAuthorId(jmessage.getInt("authorId"));
+            message.setDate(new Date(jmessage.getString("date")));
+            message.setMessage(new String(Decryptor(Base64.getDecoder().decode(jmessage.getString("message")), SessionConstants.KEY_IN_BYTES)));
+            message.setReceiverId(jmessage.getInt("groupId"));
+            return true;
+        }
+
+        return false;
     }
 
     //TODO Ciekawe czy to dobrze odszyfrowuje
@@ -114,4 +124,5 @@ public class JsonParse {
         cipher.init(Cipher.DECRYPT_MODE, secretKey);
         return cipher.doFinal(message);
     }
+
 }
