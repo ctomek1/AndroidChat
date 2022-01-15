@@ -43,9 +43,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                SessionConstants.USER_ID = 1; // TODO Usuń to też
-                startActivity(new Intent(context, MainActivity.class));
-
                 if (username.getText().toString().isEmpty() || password.getText().toString().isEmpty()) {
                     openAlertDialog(getResources().getString(R.string.notEnteredLoginOrPassword), getResources().getString(R.string.loginError));
                 } else {

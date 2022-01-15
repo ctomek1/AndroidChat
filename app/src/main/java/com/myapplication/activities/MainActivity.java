@@ -60,13 +60,6 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
-        // TODO Usuń to
-        SessionConstants.LIST_OF_USERS.add(new User(2, "User1"));
-        SessionConstants.LIST_OF_USERS.add(new User(3, "User2"));
-
-        SessionConstants.LIST_OF_GROUPS.add(new Group(1, "Group1"));
-        SessionConstants.LIST_OF_GROUPS.add(new Group(2, "Group2"));
-
         getContactsData();
         getGroupsData();
 
@@ -163,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
                 Communication communication = new Communication();
                 if (communication.getSocket().isConnected()) {
                     String result = communication.SendAndReceiveMessage(CreateJSONsWithData.GetAllGroups(SessionConstants.USER_ID));
-                    if (result != null) {
+                    if (!result.equals("null")) {
                         JsonParse.toGroupsList(result, SessionConstants.LIST_OF_GROUPS);
 
                     }
