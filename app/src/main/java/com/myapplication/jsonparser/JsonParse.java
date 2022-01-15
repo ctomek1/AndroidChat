@@ -37,7 +37,7 @@ public class JsonParse {
                 singleMessage = new JSONArray(allMessage.getJSONArray(i).toString());
                 Message msg = new Message();
                 msg.setAuthorId(singleMessage.getJSONArray(0).getInt(1));
-                msg.setMessage(singleMessage.getJSONArray(1).getString(1));
+                msg.setMessage(new String(Decryptor(singleMessage.getJSONArray(1).getString(1).getBytes(), SessionConstants.KEY_IN_BYTES)));
                 msg.setDate(new Date(singleMessage.getJSONArray(2).getString(1)));
                 msgl.add(msg);
             }
