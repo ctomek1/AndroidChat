@@ -68,10 +68,10 @@ public class GroupsListAdapter extends RecyclerView.Adapter<GroupsListAdapter.My
         }
     }
 
-    public int getIdOfGroupFromName(String groupname) {
+    public int getIdOfGroupFromName(String groupName) {
         int groupId = 0;
         for (Group group : groupsList) {
-            if (group.getName().equals(groupname)) {
+            if (group.getName().equals(groupName)) {
                 groupId = group.getId();
             }
         }

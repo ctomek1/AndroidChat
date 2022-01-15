@@ -69,10 +69,10 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.MyVi
         }
     }
 
-    public int getIdOfUserFromName(String username) {
+    public int getIdOfUserFromName(String userName) {
         int userId = 0;
         for (User user : usersList) {
-            if (user.getName().equals(username)) {
+            if (user.getName().equals(userName)) {
                 userId = user.getId();
             }
         }

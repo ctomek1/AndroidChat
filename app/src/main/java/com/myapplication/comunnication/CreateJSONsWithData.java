@@ -78,7 +78,7 @@ public class CreateJSONsWithData {
     public static String SendPrivateMessage(int authorId, String messageContent, int receiverId, Date date) throws JSONException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
 
         byte[] cypherMessageContent = messageContent.getBytes();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM.dd.yyyy HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 
         JSONObject sendPrivateMessageJSON = new JSONObject();
         sendPrivateMessageJSON.put("id", 7);
@@ -93,7 +93,7 @@ public class CreateJSONsWithData {
     public static String SendGroupMessage(int authorId, String messageContent, int groupId, Date date) throws JSONException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
 
         byte[] cypherMessageContent = messageContent.getBytes();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM.dd.yyyy HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 
         JSONObject sendGroupMessageJSON = new JSONObject();
         sendGroupMessageJSON.put("id", 8);
