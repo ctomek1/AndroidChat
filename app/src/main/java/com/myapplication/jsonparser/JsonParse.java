@@ -44,7 +44,8 @@ public class JsonParse {
                     Message msg = new Message();
                     msg.setAuthorId(singleMessage.getJSONArray(0).getInt(1));
                     msg.setMessage(new String(Decryptor(Base64.getDecoder().decode(singleMessage.getJSONArray(1).getString(1)), SessionConstants.KEY_IN_BYTES)));
-                    msg.setDate(dateFormat.parse(singleMessage.getJSONArray(2).getString(1)));
+                    msg.setReceiverId(singleMessage.getJSONArray(2).getInt(1));
+                    msg.setDate(dateFormat.parse(singleMessage.getJSONArray(3).getString(1)));
                     msgl.add(msg);
                 }
                 destinationList.addAll(msgl);
