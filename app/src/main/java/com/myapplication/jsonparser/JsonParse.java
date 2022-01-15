@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
@@ -33,6 +34,8 @@ public class JsonParse {
     public static boolean toMessageList(String jsonMessageArray, List<Message> destinationList) {
         List<Message> msgl = new ArrayList<>();
         JSONArray allMessage, singleMessage;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             try {
                 allMessage = new JSONArray(jsonMessageArray);
@@ -41,7 +44,7 @@ public class JsonParse {
                     Message msg = new Message();
                     msg.setAuthorId(singleMessage.getJSONArray(0).getInt(1));
                     msg.setMessage(new String(Decryptor(Base64.getDecoder().decode(singleMessage.getJSONArray(1).getString(1)), SessionConstants.KEY_IN_BYTES)));
-                    msg.setDate(new Date(singleMessage.getJSONArray(2).getString(1)));
+                    msg.setDate(dateFormat.parse(singleMessage.getJSONArray(2).getString(1)));
                     msgl.add(msg);
                 }
                 destinationList.addAll(msgl);
@@ -85,13 +88,15 @@ public class JsonParse {
         return true;
     }
 
+    @SneakyThrows
     public static boolean toRecentPrivateMessage(String jsonMessage, Message message) throws IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException, JSONException, UnsupportedEncodingException {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             JSONObject jmessage;
             message = new Message();
             jmessage = new JSONObject(jsonMessage);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 
-            message.setDate(new Date(jmessage.getString("date")));
+            message.setDate(dateFormat.parse(jmessage.getString("date")));
             message.setReceiverId(jmessage.getInt("receiverId"));
             message.setMessage(new String(Decryptor(Base64.getDecoder().decode(jmessage.getString("message")), SessionConstants.KEY_IN_BYTES)));
             message.setAuthorId(jmessage.getInt("authorId"));
@@ -100,14 +105,17 @@ public class JsonParse {
         return false;
     }
 
+    @SneakyThrows
     public static boolean toRecentGroupMessage(String jsonGroupMessage, Message message) throws IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException, JSONException, UnsupportedEncodingException {
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             JSONObject jmessage;
             message = new Message();
             jmessage = new JSONObject(jsonGroupMessage);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+
             message.setAuthorId(jmessage.getInt("authorId"));
-            message.setDate(new Date(jmessage.getString("date")));
+            message.setDate(dateFormat.parse(jmessage.getString("date")));
             message.setMessage(new String(Decryptor(Base64.getDecoder().decode(jmessage.getString("message")), SessionConstants.KEY_IN_BYTES)));
             message.setReceiverId(jmessage.getInt("groupId"));
             return true;
