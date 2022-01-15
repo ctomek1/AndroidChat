@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                getTextFromInputTextDialog(); // TODO czekanie na wynik
+                String test = getTextFromInputTextDialog(); // TODO czekanie na wynik
                 Thread thread = new Thread(new Runnable() {
 
                     @SneakyThrows
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
 
                         Communication communication = new Communication();
                         if (communication.getSocket().isConnected()) {
-                            String result = communication.SendAndReceiveMessage(CreateJSONsWithData.CreateGroup("aaa"));
+                            String result = communication.SendAndReceiveMessage(CreateJSONsWithData.CreateGroup(test));
 
 
                             JSONObject jsonResult = new JSONObject(result);
@@ -195,9 +195,11 @@ public class MainActivity extends AppCompatActivity {
         alertDialogClass.show(getSupportFragmentManager(), "AlertDialogCreator");
     }
 
-    private void getTextFromInputTextDialog() {
+    private String getTextFromInputTextDialog() {
 
         InputTextDialogClass inputTextDialogClass = new InputTextDialogClass();
         inputTextDialogClass.show(getSupportFragmentManager(), "InputTextDialogCreator");
+
+        return inputTextDialogClass.getText();
     }
 }
