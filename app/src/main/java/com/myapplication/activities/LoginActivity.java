@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,7 +22,7 @@ import lombok.SneakyThrows;
 public class LoginActivity extends AppCompatActivity {
 
     private Context context;
-    // TODO Pozamykaj wątki
+
     public LoginActivity() {
         this.context = this;
     }
@@ -65,8 +64,7 @@ public class LoginActivity extends AppCompatActivity {
                                 }
                             }
                             else {
-                                Toast toast = Toast.makeText(v.getContext(), getResources().getString(R.string.connectionFailed), Toast.LENGTH_LONG);
-                                toast.show();
+                                openAlertDialog(v.getResources().getString(R.string.connectionFailed), v.getResources().getString(R.string.failure));
                             }
                         }
                     });

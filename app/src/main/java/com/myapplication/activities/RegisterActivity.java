@@ -67,8 +67,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     }
                                 }
                                 else {
-                                    Toast toast = Toast.makeText(v.getContext(), getResources().getString(R.string.connectionFailed), Toast.LENGTH_LONG);
-                                    toast.show();
+                                    openAlertDialog(v.getResources().getString(R.string.connectionFailed), v.getResources().getString(R.string.failure));
                                 }
                             }
                         });

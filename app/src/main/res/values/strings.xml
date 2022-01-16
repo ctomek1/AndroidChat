@@ -36,4 +36,5 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="enterNewGroupName">Enter new group name</string>
+    <string name="sendingMessageFailed">Sending the message failed</string>
 </resources>

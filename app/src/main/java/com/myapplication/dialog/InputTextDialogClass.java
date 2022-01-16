@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.InputType;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,7 +42,6 @@ public class InputTextDialogClass extends AppCompatDialogFragment {
         final EditText input = new EditText(getActivity());
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         inputTextDialog.setView(input);
-
 
         inputTextDialog.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
@@ -83,8 +81,7 @@ public class InputTextDialogClass extends AppCompatDialogFragment {
                                 }
                                 }
                             } else {
-                                Toast toast = Toast.makeText(getContext(), getResources().getString(R.string.connectionFailed), Toast.LENGTH_LONG);
-                                toast.show();
+                                openAlertDialog(getResources().getString(R.string.connectionFailed), getResources().getString(R.string.failure));
                             }
                         }
                     });

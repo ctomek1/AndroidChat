@@ -29,7 +29,7 @@ import lombok.SneakyThrows;
 
 
 public class JsonParse {
-    //TODO Trzeba sprawdzić jak zwracane są wiadomości grupowe
+
     @SneakyThrows
     public static boolean toMessageList(String jsonMessageArray, List<Message> destinationList) {
         List<Message> msgl = new ArrayList<>();
@@ -125,7 +125,6 @@ public class JsonParse {
         return false;
     }
 
-    //TODO Ciekawe czy to dobrze odszyfrowuje
     public static byte[] Decryptor(byte[] message, byte[] keyBytes) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
 
         Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");

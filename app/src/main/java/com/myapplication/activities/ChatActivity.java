@@ -3,23 +3,21 @@ package com.myapplication.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.myapplication.R;
-import com.myapplication.adapters.AddUserToGroupAdapter;
 import com.myapplication.adapters.ChatAdapter;
 import com.myapplication.comunnication.Communication;
 import com.myapplication.comunnication.CreateJSONsWithData;
 import com.myapplication.constants.SessionConstants;
+import com.myapplication.dialog.AlertDialogClass;
 import com.myapplication.jsonparser.JsonParse;
 import com.myapplication.models.Message;
 
@@ -27,6 +25,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 import lombok.SneakyThrows;
 
@@ -40,12 +39,12 @@ public class ChatActivity extends AppCompatActivity {
     private TextView nameChat;
     private Context context;
     private ArrayList<Message> messagesList = new ArrayList<>();
-    private Handler myHandler;
 
     public ChatActivity() {
         this.context = this;
     }
 
+    @SneakyThrows
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,8 +76,7 @@ public class ChatActivity extends AppCompatActivity {
                         String privateMessages = communication.SendAndReceiveMessage(CreateJSONsWithData.GetAllPrivateMessages(SessionConstants.CURRENT_RECEIVER_ID, SessionConstants.USER_ID));
                         JsonParse.toMessageList(privateMessages, messagesList);
                     } else {
-                        Toast toast = Toast.makeText(context, getResources().getString(R.string.connectionFailed), Toast.LENGTH_LONG);
-                        toast.show();
+                        openAlertDialog(getResources().getString(R.string.connectionFailed), getResources().getString(R.string.failure));
                     }
                 }
             });
@@ -98,14 +96,13 @@ public class ChatActivity extends AppCompatActivity {
                         JsonParse.toMessageList(groupMessages, messagesList);
 
                     } else {
-                        Toast toast = Toast.makeText(context, getResources().getString(R.string.connectionFailed), Toast.LENGTH_LONG);
-                        toast.show();
+                        openAlertDialog(getResources().getString(R.string.connectionFailed), getResources().getString(R.string.failure));
                     }
                 }
             });
             thread.start();
         }
-
+        TimeUnit.MILLISECONDS.sleep(100);
         setMessagesToAdapter();
         chatRecyclerView.smoothScrollToPosition(messagesList.size());
 
@@ -137,9 +134,9 @@ public class ChatActivity extends AppCompatActivity {
                                     messagesList.add(message);
                                     chatAdapter.notifyItemRangeChanged(0, messagesList.size());
                                     chatRecyclerView.smoothScrollToPosition(messagesList.size());
-                                }
-                                else {
-                                    //TODO informacja o błednym wysłaniu
+                                } else {
+
+                                    openAlertDialog(v.getResources().getString(R.string.sendingMessageFailed), v.getResources().getString(R.string.failure));
                                 }
 
                             } else {
@@ -153,14 +150,13 @@ public class ChatActivity extends AppCompatActivity {
                                     messagesList.add(message);
                                     chatAdapter.notifyItemRangeChanged(0, messagesList.size());
                                     chatRecyclerView.smoothScrollToPosition(messagesList.size());
-                                }
-                                else {
-                                    //TODO informacja o błednym wysłaniu
+                                } else {
+
+                                    openAlertDialog(v.getResources().getString(R.string.sendingMessageFailed), v.getResources().getString(R.string.failure));
                                 }
                             }
                         } else {
-                            Toast toast = Toast.makeText(v.getContext(), getResources().getString(R.string.connectionFailed), Toast.LENGTH_LONG);
-                            toast.show();
+                            openAlertDialog(getResources().getString(R.string.connectionFailed), getResources().getString(R.string.failure));
                         }
                     }
                 });
@@ -199,12 +195,9 @@ public class ChatActivity extends AppCompatActivity {
                                     chatAdapter.notifyItemRangeChanged(0, messagesList.size());
                                 }
                             }
-
-
                             chatRecyclerView.smoothScrollToPosition(messagesList.size());
                         } else {
-                            Toast toast = Toast.makeText(v.getContext(), getResources().getString(R.string.connectionFailed), Toast.LENGTH_LONG);
-                            toast.show();
+                            openAlertDialog(v.getResources().getString(R.string.connectionFailed), v.getResources().getString(R.string.failure));
                         }
                     }
                 });
@@ -227,20 +220,23 @@ public class ChatActivity extends AppCompatActivity {
 
     private void setMessagesToAdapter() {
 
-            chatAdapter = new ChatAdapter(this, messagesList);
-            chatRecyclerView.setAdapter(chatAdapter);
-
-
-
+        chatAdapter = new ChatAdapter(this, messagesList);
+        chatRecyclerView.setAdapter(chatAdapter);
     }
 
     private Boolean isMessageLatest(Message message) {
+
         Message latestMessage = messagesList.get(messagesList.size() - 1);
         if (message == latestMessage) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
+    }
+
+    private void openAlertDialog(String message, String title) {
+
+        AlertDialogClass alertDialogClass = new AlertDialogClass(message, title);
+        alertDialogClass.show(getSupportFragmentManager(), "AlertDialogCreator");
     }
 }

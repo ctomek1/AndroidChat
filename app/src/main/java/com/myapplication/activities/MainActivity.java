@@ -105,8 +105,7 @@ public class MainActivity extends AppCompatActivity {
                     JsonParse.toUsersList(result, SessionConstants.LIST_OF_USERS);
                 }
                 else {
-                    Toast toast = Toast.makeText(context, getResources().getString(R.string.connectionFailed), Toast.LENGTH_LONG);
-                    toast.show();
+                    openAlertDialog(getResources().getString(R.string.connectionFailed), getResources().getString(R.string.failure));
                 }
             }
         });
@@ -129,8 +128,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 else {
-                    Toast toast = Toast.makeText(context, getResources().getString(R.string.connectionFailed), Toast.LENGTH_LONG);
-                    toast.show();
+                    openAlertDialog(getResources().getString(R.string.connectionFailed), getResources().getString(R.string.failure));
                 }
             }
         });
@@ -154,5 +152,11 @@ public class MainActivity extends AppCompatActivity {
         InputTextDialogClass inputTextDialogClass = new InputTextDialogClass();
         inputTextDialogClass.show(getSupportFragmentManager(), "InputTextDialogCreator");
 
+    }
+
+    private void openAlertDialog(String message, String title) {
+
+        AlertDialogClass alertDialogClass = new AlertDialogClass(message, title);
+        alertDialogClass.show(getSupportFragmentManager(), "AlertDialogCreator");
     }
 }
