@@ -108,7 +108,7 @@ public class CreateJSONsWithData {
             sendGroupMessageJSON.put("authorId", authorId);
             sendGroupMessageJSON.put("groupId", groupId);
             sendGroupMessageJSON.put("messageContent", Base64.getEncoder().encodeToString(Encryptor(cypherMessageContent, SessionConstants.KEY_IN_BYTES)));
-            sendGroupMessageJSON.put("dateOfSend", dateFormat.format(date));
+            sendGroupMessageJSON.put("date", dateFormat.format(date));
 
             return sendGroupMessageJSON.toString();
         }

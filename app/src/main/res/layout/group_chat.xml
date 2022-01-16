@@ -53,13 +53,13 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="602dp"
+            android:layout_height="457dp"
             android:orientation="horizontal">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/chatRecyclerView"
                 android:layout_width="411dp"
-                android:layout_height="590dp"
+                android:layout_height="455dp"
                 android:orientation="vertical" />
         </LinearLayout>
 
