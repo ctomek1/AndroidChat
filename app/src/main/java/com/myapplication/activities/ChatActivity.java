@@ -3,6 +3,7 @@ package com.myapplication.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -38,8 +39,8 @@ public class ChatActivity extends AppCompatActivity {
     private Button refreshButton;
     private TextView nameChat;
     private Context context;
-
     private ArrayList<Message> messagesList = new ArrayList<>();
+    private Handler myHandler;
 
     public ChatActivity() {
         this.context = this;
@@ -95,6 +96,7 @@ public class ChatActivity extends AppCompatActivity {
                     if (communication.getSocket().isConnected()) {
                         String groupMessages = communication.SendAndReceiveMessage(CreateJSONsWithData.GetAllGroupMessages(SessionConstants.CURRENT_GROUP_ID));
                         JsonParse.toMessageList(groupMessages, messagesList);
+
                     } else {
                         Toast toast = Toast.makeText(context, getResources().getString(R.string.connectionFailed), Toast.LENGTH_LONG);
                         toast.show();
@@ -104,8 +106,8 @@ public class ChatActivity extends AppCompatActivity {
             thread.start();
         }
 
-        setMessagesToAdapter(messagesList);
-        chatRecyclerView.scrollToPosition(messagesList.size() - 1);
+        setMessagesToAdapter();
+        chatRecyclerView.smoothScrollToPosition(messagesList.size());
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @SneakyThrows
@@ -133,8 +135,8 @@ public class ChatActivity extends AppCompatActivity {
 
                                 if (jsonResult.getBoolean("result")) {
                                     messagesList.add(message);
-                                    setMessagesToAdapter(messagesList);
-                                    chatRecyclerView.scrollToPosition(messagesList.size() - 1);
+                                    chatAdapter.notifyItemRangeChanged(0, messagesList.size());
+                                    chatRecyclerView.smoothScrollToPosition(messagesList.size());
                                 }
                                 else {
                                     //TODO informacja o błednym wysłaniu
@@ -149,8 +151,8 @@ public class ChatActivity extends AppCompatActivity {
 
                                 if (jsonResult.getBoolean("result")) {
                                     messagesList.add(message);
-                                    setMessagesToAdapter(messagesList);
-                                    chatRecyclerView.scrollToPosition(messagesList.size() - 1);
+                                    chatAdapter.notifyItemRangeChanged(0, messagesList.size());
+                                    chatRecyclerView.smoothScrollToPosition(messagesList.size());
                                 }
                                 else {
                                     //TODO informacja o błednym wysłaniu
@@ -184,6 +186,7 @@ public class ChatActivity extends AppCompatActivity {
                                 JsonParse.toRecentPrivateMessage(result, message);
                                 if (!isMessageLatest(message)) {
                                     messagesList.add(message);
+                                    chatAdapter.notifyItemRangeChanged(0, messagesList.size());
                                 }
 
                             } else {
@@ -193,11 +196,12 @@ public class ChatActivity extends AppCompatActivity {
                                 JsonParse.toRecentGroupMessage(result, message);
                                 if (!isMessageLatest(message)) {
                                     messagesList.add(message);
+                                    chatAdapter.notifyItemRangeChanged(0, messagesList.size());
                                 }
                             }
 
-                            setMessagesToAdapter(messagesList);
-                            chatRecyclerView.scrollToPosition(messagesList.size() - 1);
+
+                            chatRecyclerView.smoothScrollToPosition(messagesList.size());
                         } else {
                             Toast toast = Toast.makeText(v.getContext(), getResources().getString(R.string.connectionFailed), Toast.LENGTH_LONG);
                             toast.show();
@@ -207,7 +211,6 @@ public class ChatActivity extends AppCompatActivity {
                 thread.start();
             }
         });
-
     }
 
     private void setAddUserButton() {
@@ -222,9 +225,13 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-    private void setMessagesToAdapter(ArrayList<Message> messages) {
-        chatAdapter = new ChatAdapter(this, messages);
-        chatRecyclerView.setAdapter(chatAdapter);
+    private void setMessagesToAdapter() {
+
+            chatAdapter = new ChatAdapter(this, messagesList);
+            chatRecyclerView.setAdapter(chatAdapter);
+
+
+
     }
 
     private Boolean isMessageLatest(Message message) {
