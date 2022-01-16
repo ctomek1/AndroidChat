@@ -113,6 +113,7 @@ public class ChatActivity extends AppCompatActivity {
 
                 Message message = new Message();
                 message.setMessage(messageBox.getText().toString());
+                messageBox.setText("");
                 message.setAuthorId(SessionConstants.USER_ID);
                 message.setDate(Calendar.getInstance().getTime());
 

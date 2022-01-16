@@ -85,8 +85,10 @@ public class MainActivity extends AppCompatActivity {
         createGroupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 getTextFromInputTextDialog();
+                getGroupsData();
+                setGroupsListToAdapter();
+                recyclerView.smoothScrollToPosition(SessionConstants.LIST_OF_GROUPS.size());
             }
         });
     }
