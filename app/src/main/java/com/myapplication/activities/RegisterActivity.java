@@ -1,19 +1,17 @@
 package com.myapplication.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.myapplication.dialog.AlertDialogClass;
-import com.myapplication.comunnication.Communication;
 import com.myapplication.R;
+import com.myapplication.comunnication.Communication;
 import com.myapplication.comunnication.CreateJSONsWithData;
+import com.myapplication.dialog.AlertDialogClass;
 
 import org.json.JSONObject;
 
@@ -21,10 +19,8 @@ import lombok.SneakyThrows;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private Context context;
-
     public RegisterActivity() {
-        this.context = this;
+
     }
 
     @Override
@@ -61,7 +57,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                                     if (jsonResult.getBoolean("result") == true) {
                                         openAlertDialog(getResources().getString(R.string.registrationWasSuccessful), getResources().getString(R.string.registrationSuccessful));
-                                        startActivity(new Intent(context, LoginActivity.class));
+                                        startActivity(new Intent(v.getContext(), LoginActivity.class));
                                     } else {
                                         openAlertDialog(getResources().getString(R.string.userAlreadyExist), getResources().getString(R.string.registerError));
                                     }

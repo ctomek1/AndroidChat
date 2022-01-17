@@ -1,6 +1,5 @@
 package com.myapplication.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -37,11 +36,10 @@ public class ChatActivity extends AppCompatActivity {
     private Button sendButton;
     private Button refreshButton;
     private TextView nameChat;
-    private Context context;
     private ArrayList<Message> messagesList = new ArrayList<>();
 
     public ChatActivity() {
-        this.context = this;
+
     }
 
     @SneakyThrows

@@ -1,9 +1,9 @@
 package com.myapplication.jsonparser;
 
+import com.myapplication.constants.SessionConstants;
 import com.myapplication.models.Group;
 import com.myapplication.models.Message;
 import com.myapplication.models.User;
-import com.myapplication.constants.SessionConstants;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,7 +15,6 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Date;
 import java.util.List;
 
 import javax.crypto.BadPaddingException;

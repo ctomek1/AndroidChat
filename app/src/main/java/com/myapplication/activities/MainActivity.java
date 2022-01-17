@@ -1,11 +1,9 @@
 package com.myapplication.activities;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,12 +18,6 @@ import com.myapplication.constants.SessionConstants;
 import com.myapplication.dialog.AlertDialogClass;
 import com.myapplication.dialog.InputTextDialogClass;
 import com.myapplication.jsonparser.JsonParse;
-import com.myapplication.models.Group;
-import com.myapplication.models.User;
-
-import org.json.JSONObject;
-
-import java.io.IOException;
 
 import lombok.SneakyThrows;
 
@@ -40,21 +32,17 @@ public class MainActivity extends AppCompatActivity {
     private UsersListAdapter usersListAdapter;
     private GroupsListAdapter groupsListAdapter;
 
-    private Context context;
-
-    public MainActivity() {
-        this.context = this;
-    }
+    public MainActivity() { }
 
     @SneakyThrows
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         contactsButton = findViewById(R.id.contactsListButton);
         groupsButton = findViewById(R.id.groupsListButton);
         createGroupButton = findViewById(R.id.createGroupButton);
-
         listName = findViewById(R.id.listName);
         recyclerView = findViewById(R.id.list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

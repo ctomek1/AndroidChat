@@ -1,30 +1,23 @@
 package com.myapplication.activities;
 
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Bundle;
-
-import com.myapplication.comunnication.Communication;
 import com.myapplication.R;
-import com.myapplication.comunnication.CreateJSONsWithData;
-import com.myapplication.constants.SessionConstants;
-import com.myapplication.models.User;
 import com.myapplication.adapters.AddUserToGroupAdapter;
-
-import java.io.IOException;
-import java.util.ArrayList;
+import com.myapplication.constants.SessionConstants;
 
 import lombok.SneakyThrows;
 
 public class AddUserToGroupActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private ArrayList<User> usersList = new ArrayList<>();
     private AddUserToGroupAdapter addUserToGroupAdapter;
 
-    public AddUserToGroupActivity() throws IOException {
+    public AddUserToGroupActivity() {
     }
 
     @SneakyThrows

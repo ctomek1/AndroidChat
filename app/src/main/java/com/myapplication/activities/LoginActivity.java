@@ -1,6 +1,5 @@
 package com.myapplication.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,11 +8,11 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.myapplication.dialog.AlertDialogClass;
-import com.myapplication.comunnication.Communication;
 import com.myapplication.R;
+import com.myapplication.comunnication.Communication;
 import com.myapplication.comunnication.CreateJSONsWithData;
 import com.myapplication.constants.SessionConstants;
+import com.myapplication.dialog.AlertDialogClass;
 
 import org.json.JSONObject;
 
@@ -21,10 +20,8 @@ import lombok.SneakyThrows;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private Context context;
-
     public LoginActivity() {
-        this.context = this;
+
     }
 
     @Override
@@ -58,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
                                 if (jsonResult.getBoolean("result") == true) {
 
                                     SessionConstants.USER_ID = jsonResult.getInt("userId");
-                                    startActivity(new Intent(context, MainActivity.class));
+                                    startActivity(new Intent(v.getContext(), MainActivity.class));
                                 } else {
                                     openAlertDialog(getResources().getString(R.string.invalidLoginOrPassword), getResources().getString(R.string.loginError));
                                 }
@@ -78,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                startActivity(new Intent(context, RegisterActivity.class));
+                startActivity(new Intent(v.getContext(), RegisterActivity.class));
             }
         });
     }
