@@ -23,7 +23,7 @@
     <string name="typeMessage">Type message</string>
     <string name="refresh">Refresh</string>
     <string name="addUser">Add user</string>
-    <string name="selectUser">Select user</string>
+    <string name="selectUser">Select user to add</string>
     <string name="createGroup">Create group</string>
     <string name="success">Success</string>
     <string name="groupName">Group name</string>
