@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_activity);
 
         contactsButton = findViewById(R.id.contactsListButton);
         groupsButton = findViewById(R.id.groupsListButton);

@@ -37,7 +37,7 @@ public class AddUserToGroupAdapter extends RecyclerView.Adapter<AddUserToGroupAd
     @Override
     public AddUserToGroupAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View v = LayoutInflater.from(context).inflate(R.layout.list_layout, parent, false);
+        View v = LayoutInflater.from(context).inflate(R.layout.users_and_group_list_layout, parent, false);
         return new AddUserToGroupAdapter.MyViewHolder(v);
     }
 

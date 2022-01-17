@@ -24,7 +24,7 @@ public class AddUserToGroupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_user_to_group);
+        setContentView(R.layout.add_user_to_group_activity);
         recyclerView = findViewById(R.id.list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);

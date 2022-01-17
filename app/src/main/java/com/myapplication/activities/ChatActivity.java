@@ -47,9 +47,9 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         if (SessionConstants.IS_USER_CHAT) {
-            setContentView(R.layout.users_chat);
+            setContentView(R.layout.users_chat_activity);
         } else {
-            setContentView(R.layout.group_chat);
+            setContentView(R.layout.group_chat_activity);
         }
 
         chatRecyclerView = findViewById(R.id.chatRecyclerView);
