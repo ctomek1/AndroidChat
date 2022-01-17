@@ -38,7 +38,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
         Message message = messagesList.get(position);
-
         holder.author.setText(getAuthorName(message.getAuthorId()));
         holder.message.setText(message.getMessage());
     }

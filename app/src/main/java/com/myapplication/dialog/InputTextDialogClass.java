@@ -93,18 +93,6 @@ public class InputTextDialogClass extends AppCompatDialogFragment {
         return inputTextDialog.create();
     }
 
-    public void show(FragmentManager fragmentManager,String tag){
-        super.show(fragmentManager,tag);
-
-        while(this.text == null){
-            try {
-                TimeUnit.MILLISECONDS.sleep(80);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-    }
 
     private void openAlertDialog(String message, String title) {
 

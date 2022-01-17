@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -113,7 +114,6 @@ public class JsonParse {
             message = new Message();
             jmessage = new JSONObject(jsonGroupMessage);
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-
             message.setAuthorId(jmessage.getInt("authorId"));
             message.setDate(dateFormat.parse(jmessage.getString("date")));
             message.setMessage(new String(Decryptor(Base64.getDecoder().decode(jmessage.getString("message")), SessionConstants.KEY_IN_BYTES)));

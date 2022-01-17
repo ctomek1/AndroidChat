@@ -1,9 +1,11 @@
 package com.myapplication.activities;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,6 +20,12 @@ import com.myapplication.constants.SessionConstants;
 import com.myapplication.dialog.AlertDialogClass;
 import com.myapplication.dialog.InputTextDialogClass;
 import com.myapplication.jsonparser.JsonParse;
+import com.myapplication.models.Group;
+import com.myapplication.models.User;
+
+import org.json.JSONObject;
+
+import java.io.IOException;
 
 import lombok.SneakyThrows;
 
@@ -43,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         contactsButton = findViewById(R.id.contactsListButton);
         groupsButton = findViewById(R.id.groupsListButton);
         createGroupButton = findViewById(R.id.createGroupButton);
+
         listName = findViewById(R.id.listName);
         recyclerView = findViewById(R.id.list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -66,7 +75,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 createGroupButton.setVisibility(View.VISIBLE);
-                setGroupsListToAdapter();
+
+                if(!(recyclerView.getAdapter() == null)){
+                    getGroupsData();
+                    setGroupsListToAdapter();
+                }else{
+                    getGroupsData();
+                    groupsListAdapter.notifyItemRangeChanged(0, SessionConstants.LIST_OF_GROUPS.size());
+                }
+
+
+
             }
         });
 
@@ -91,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Communication communication = new Communication();
                 if (communication.getSocket().isConnected()) {
+                    SessionConstants.LIST_OF_USERS.clear();
                     String result = communication.SendAndReceiveMessage(CreateJSONsWithData.GetAllUsers());
                     JsonParse.toUsersList(result, SessionConstants.LIST_OF_USERS);
                 }
@@ -114,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
                 if (communication.getSocket().isConnected()) {
                     String result = communication.SendAndReceiveMessage(CreateJSONsWithData.GetAllGroups(SessionConstants.USER_ID));
                     if (!result.equals("null")) {
+                        SessionConstants.LIST_OF_GROUPS.clear();
                         JsonParse.toGroupsList(result, SessionConstants.LIST_OF_GROUPS);
                     }
                 }
@@ -131,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(usersListAdapter);
     }
 
+    @SneakyThrows
     private void setGroupsListToAdapter() {
         listName.setText(getResources().getString(R.string.groupsList));
         groupsListAdapter = new GroupsListAdapter(this, SessionConstants.LIST_OF_GROUPS);
