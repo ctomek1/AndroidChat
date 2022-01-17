@@ -9,7 +9,6 @@ import android.widget.EditText;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDialogFragment;
-import androidx.fragment.app.FragmentManager;
 
 import com.myapplication.R;
 import com.myapplication.comunnication.Communication;
@@ -17,8 +16,6 @@ import com.myapplication.comunnication.CreateJSONsWithData;
 import com.myapplication.constants.SessionConstants;
 
 import org.json.JSONObject;
-
-import java.util.concurrent.TimeUnit;
 
 import lombok.SneakyThrows;
 
@@ -92,7 +89,6 @@ public class InputTextDialogClass extends AppCompatDialogFragment {
 
         return inputTextDialog.create();
     }
-
 
     private void openAlertDialog(String message, String title) {
 
