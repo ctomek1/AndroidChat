@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -84,7 +85,8 @@ public class AddUserToGroupAdapter extends RecyclerView.Adapter<AddUserToGroupAd
                                 }
                             }
                             else {
-                                openAlertDialog(v.getResources().getString(R.string.connectionFailed), v.getResources().getString(R.string.failure));
+                                Toast toast = Toast.makeText(v.getContext(), v.getResources().getString(R.string.connectionFailed), Toast.LENGTH_LONG);
+                                toast.show();
                             }
                         }
 

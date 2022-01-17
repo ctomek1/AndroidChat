@@ -102,7 +102,7 @@ public class ChatActivity extends AppCompatActivity {
             });
             thread.start();
         }
-        TimeUnit.MILLISECONDS.sleep(100);
+       // TimeUnit.MILLISECONDS.sleep(100);
         setMessagesToAdapter();
         chatRecyclerView.smoothScrollToPosition(messagesList.size());
 
@@ -219,8 +219,9 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
+    @SneakyThrows
     private void setMessagesToAdapter() {
-
+        TimeUnit.MILLISECONDS.sleep(1000);
         chatAdapter = new ChatAdapter(this, messagesList);
         chatRecyclerView.setAdapter(chatAdapter);
     }
